@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Sprout Google Recaptcha plugin for Craft CMS 3.x
+ *
+ * Sprout Google Recaptcha Settings.twig
+ *
+ * @author    Barrel Strength
+ * @copyright Copyright (c) 2018 Barrel Strength
+ * @link      https://www.barrelstrengthdesign.com/
+ * @package   SproutGoogleRecaptcha
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutgooglerecaptcha\\assetbundles\\sproutgooglerecaptcha\\SproutGoogleRecaptchaAsset") %}
+
+{{ forms.textField({
+    label: 'Some Field',
+    instructions: 'Enter some setting here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: settings['someAttribute']})
+}}
