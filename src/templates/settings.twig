@@ -15,12 +15,22 @@
 
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutgooglerecaptcha\\assetbundles\\sproutgooglerecaptcha\\SproutGoogleRecaptchaAsset") %}
+{{ forms.textField({
+    label: 'Site Key',
+    instructions: 'Get the site key on your dashboard',
+    id: 'siteKey',
+    name: 'siteKey',
+    required: true,
+    errors: null,
+    value: settings['siteKey']})
+}}
 
 {{ forms.textField({
-    label: 'Some Field',
-    instructions: 'Enter some setting here.',
-    id: 'someAttribute',
-    name: 'someAttribute',
-    value: settings['someAttribute']})
+    label: 'Secret key',
+    instructions: 'Get the secret key on your dashboard',
+    id: 'secretKey',
+    name: 'secretKey',
+    type: 'password',
+    required: true,
+    value: settings['secretKey']})
 }}
