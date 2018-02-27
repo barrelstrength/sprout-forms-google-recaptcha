@@ -11,6 +11,7 @@
 namespace barrelstrength\sproutgooglerecaptcha\services;
 
 use barrelstrength\sproutgooglerecaptcha\contracts\GoogleRecaptcha;
+use Craft;
 use craft\base\Component;
 
 /**
@@ -42,10 +43,34 @@ class Recaptcha extends Component
      * @param string $response usually $_POST['g-recaptcha-response']
      * @return boolean
      */
-    public function validate($response)
+    public function validateResponse($response)
     {
         return $this->recaptcha->isValid($response);
     }
+
+    /**
+     * Verify Submission
+     *
+     * @return boolean
+     */
+    public function verifySubmission() : bool
+    {
+        // Only do this on the front-end
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+            return true;
+        }
+
+        if (!isset($_POST['g-recaptcha-response'])){
+            return false;
+        }
+
+        $response = $_POST['g-recaptcha-response'] ?? null;
+
+        $isValid = $this->validateResponse($response.'as');
+
+        return $isValid;
+    }
+
 
     /*
      * HTML for Form

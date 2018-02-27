@@ -187,7 +187,7 @@ class GoogleRecaptcha
             $data = ['hl' => $this->language];
         }
 
-        return '<script src="'.self::API_RUL.'?'.http_build_query($data).'"></script>';
+        return self::API_RUL.'?'.http_build_query($data);
     }
 
     /**

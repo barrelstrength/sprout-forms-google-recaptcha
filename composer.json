@@ -36,7 +36,7 @@
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/barrelstrength/craft-sprout-google-recaptcha /sprout-google-recaptcha/master/CHANGELOG.md",
         "components": {
-            "recaptcha": "barrelstrength\\sproutgooglerecaptcha\\services\\Recaptcha"
+            "app": "barrelstrength\\sproutgooglerecaptcha\\services\\App"
         },
         "class": "barrelstrength\\sproutgooglerecaptcha\\SproutGoogleRecaptcha"
     }

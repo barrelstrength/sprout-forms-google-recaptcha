@@ -13,11 +13,12 @@ namespace barrelstrength\sproutgooglerecaptcha;
 use barrelstrength\sproutgooglerecaptcha\services\Recaptcha as RecaptchaService;
 use barrelstrength\sproutgooglerecaptcha\variables\SproutGoogleRecaptchaVariable;
 use barrelstrength\sproutgooglerecaptcha\models\Settings;
+use barrelstrength\sproutforms\services\Entries;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
 
 use Craft;
 use craft\base\Plugin;
-use craft\services\Plugins;
-use craft\events\PluginEvent;
+use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use craft\web\twig\variables\CraftVariable;
 
 use yii\base\Event;
@@ -70,14 +71,23 @@ class SproutGoogleRecaptcha extends Plugin
             }
         );
 
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
+        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
+            $event->isValid = SproutGoogleRecaptcha::$app->recaptcha->verifySubmission();
+
+            if (!$event->isValid){
+                $event->fakeIt = true;
+                if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') != ""){
+                    $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
                 }
             }
-        );
+        });
+
+        // Support for displayForm() GoogleRecaptcha output via Hook (if enabled)
+        Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
+            $googleRecaptchaFile = SproutGoogleRecaptcha::$app->recaptcha->getScript();
+            Craft::$app->view->registerJsFile($googleRecaptchaFile);
+            return SproutGoogleRecaptcha::$app->recaptcha->getHtml();
+        });
 
         Craft::info(
             Craft::t(
