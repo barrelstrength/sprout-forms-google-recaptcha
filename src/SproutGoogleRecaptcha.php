@@ -59,17 +59,8 @@ class SproutGoogleRecaptcha extends Plugin
     public function init()
     {
         parent::init();
-        self::$app = $this;
 
-        Event::on(
-            CraftVariable::class,
-            CraftVariable::EVENT_INIT,
-            function (Event $event) {
-                /** @var CraftVariable $variable */
-                $variable = $event->sender;
-                $variable->set('sproutGoogleRecaptcha', SproutGoogleRecaptchaVariable::class);
-            }
-        );
+        self::$app = $this;
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
             $response = SproutGoogleRecaptcha::$app->recaptcha->verifySubmission();
@@ -90,38 +81,6 @@ class SproutGoogleRecaptcha extends Plugin
 
             return '';
         });
-
-        Craft::info(
-            Craft::t(
-                'sprout-google-recaptcha',
-                '{name} plugin loaded',
-                ['name' => $this->name]
-            ),
-            __METHOD__
-        );
     }
 
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    protected function createSettingsModel()
-    {
-        return new Settings();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function settingsHtml(): string
-    {
-        return Craft::$app->view->renderTemplate(
-            'sprout-google-recaptcha/settings',
-            [
-                'settings' => $this->getSettings()
-            ]
-        );
-    }
 }

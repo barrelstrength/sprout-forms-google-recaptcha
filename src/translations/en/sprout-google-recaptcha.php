@@ -13,6 +13,4 @@
  * @package   SproutGoogleRecaptcha
  * @since     1.0.0
  */
-return [
-    'Sprout Google Recaptcha plugin loaded' => 'Sprout Google Recaptcha plugin loaded',
-];
+return [];
