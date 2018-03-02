@@ -72,21 +72,23 @@ class SproutGoogleRecaptcha extends Plugin
         );
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
-            $event->isValid = SproutGoogleRecaptcha::$app->recaptcha->verifySubmission();
-
-            if (!$event->isValid){
-                $event->fakeIt = true;
-                if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') != ""){
-                    $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
-                }
+            $response = SproutGoogleRecaptcha::$app->recaptcha->verifySubmission();
+            if (!$response->success){
+                $event->entry->addError('googleRecaptcha', 'ups!');
             }
         });
 
         // Support for displayForm() GoogleRecaptcha output via Hook (if enabled)
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
-            $googleRecaptchaFile = SproutGoogleRecaptcha::$app->recaptcha->getScript();
-            Craft::$app->view->registerJsFile($googleRecaptchaFile);
-            return SproutGoogleRecaptcha::$app->recaptcha->getHtml();
+            $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+
+            if ($sproutFormsSettings->enableCaptchas && $sproutFormsSettings->enableGoogleRecaptcha){
+                $googleRecaptchaFile = SproutGoogleRecaptcha::$app->recaptcha->getScript();
+                Craft::$app->view->registerJsFile($googleRecaptchaFile);
+                return SproutGoogleRecaptcha::$app->recaptcha->getHtml();
+            }
+
+            return '';
         });
 
         Craft::info(

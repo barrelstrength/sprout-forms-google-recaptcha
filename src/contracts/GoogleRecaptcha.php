@@ -107,8 +107,9 @@ class GoogleRecaptcha
      */
     public function __construct()
     {
-        $this->siteKey = SproutGoogleRecaptcha::$app->getSettings()->siteKey;
-        $this->secretKey = SproutGoogleRecaptcha::$app->getSettings()->secretKey;
+        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        $this->siteKey = $sproutFormsSettings->googleRecaptchaSiteKey;
+        $this->secretKey = $sproutFormsSettings->googleRecaptchaSecretKey;
         $this->remoteIp = $_SERVER['REMOTE_ADDR'];
     }
 
@@ -221,12 +222,12 @@ class GoogleRecaptcha
      *
      * @param string $response $_POST['g-recaptcha-response']
      *
-     * @return bool
+     * @return array|null
      */
-    public function isValid($response)
+    public function getResponse($response)
     {
         if (empty($response) || is_null($this->secretKey)) {
-            return false;
+            return ['success' => false, 'message' => "Can't be blank"];
         }
 
         $params = [
@@ -252,11 +253,11 @@ class GoogleRecaptcha
         }
 
         if (empty($response) || is_null($response)) {
-            return false;
+            return null;
         }
 
         $json = json_decode($response);
 
-        return $json->success ?? false;
+        return $json;
     }
 }

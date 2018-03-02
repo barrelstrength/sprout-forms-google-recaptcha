@@ -41,11 +41,11 @@ class Recaptcha extends Component
     /*
      * Validate Response from Google Recaptcha
      * @param string $response usually $_POST['g-recaptcha-response']
-     * @return boolean
+     * @return array|null
      */
-    public function validateResponse($response)
+    public function getResponse($response)
     {
-        return $this->recaptcha->isValid($response);
+        return $this->recaptcha->getResponse($response);
     }
 
     /**
@@ -53,7 +53,7 @@ class Recaptcha extends Component
      *
      * @return boolean
      */
-    public function verifySubmission() : bool
+    public function verifySubmission() : array
     {
         // Only do this on the front-end
         if (Craft::$app->getRequest()->getIsCpRequest()) {
@@ -66,9 +66,9 @@ class Recaptcha extends Component
 
         $response = $_POST['g-recaptcha-response'] ?? null;
 
-        $isValid = $this->validateResponse($response.'as');
+        $googleResponse = $this->getResponse($response);
 
-        return $isValid;
+        return $googleResponse;
     }
 
 
