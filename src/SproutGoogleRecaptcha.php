@@ -10,16 +10,16 @@
 
 namespace barrelstrength\sproutgooglerecaptcha;
 
+use barrelstrength\sproutforms\services\Forms;
+use barrelstrength\sproutgooglerecaptcha\integrations\sproutforms\GoogleRecaptcha;
+use barrelstrength\sproutgooglerecaptcha\services\App;
 use barrelstrength\sproutgooglerecaptcha\services\Recaptcha as RecaptchaService;
-use barrelstrength\sproutgooglerecaptcha\variables\SproutGoogleRecaptchaVariable;
-use barrelstrength\sproutgooglerecaptcha\models\Settings;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 
 use Craft;
 use craft\base\Plugin;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
-use craft\web\twig\variables\CraftVariable;
 
 use yii\base\Event;
 
@@ -34,24 +34,20 @@ use yii\base\Event;
  */
 class SproutGoogleRecaptcha extends Plugin
 {
-    // Static Properties
-    // =========================================================================
-
     /**
-     * @var SproutGoogleRecaptcha
+     * @var SproutInvisibleCaptcha
      */
     public static $app;
-
-    // Public Properties
-    // =========================================================================
 
     /**
      * @var string
      */
     public $schemaVersion = '1.0.0';
 
-    // Public Methods
-    // =========================================================================
+
+    public $hasCpSettings = true;
+
+    public $hasCpSection = false;
 
     /**
      * @inheritdoc
@@ -62,25 +58,37 @@ class SproutGoogleRecaptcha extends Plugin
 
         self::$app = $this;
 
-        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
-            $response = SproutGoogleRecaptcha::$app->recaptcha->verifySubmission();
-            if (!$response->success){
-                $event->entry->addError('googleRecaptcha', 'ups!');
-            }
+        $this->setComponents([
+            'app' => App::class
+        ]);
+
+        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
+            $event->types[] = GoogleRecaptcha::class;
         });
+
+
+//        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
+//            $response = SproutInvisibleCaptcha::$app->recaptcha->verifySubmission();
+//            if (!$response->success){
+//                $event->entry->addError('googleRecaptcha', 'ups!');
+//            }
+//        });
 
         // Support for displayForm() GoogleRecaptcha output via Hook (if enabled)
-        Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
-            $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-
-            if ($sproutFormsSettings->enableCaptchas && $sproutFormsSettings->enableGoogleRecaptcha){
-                $googleRecaptchaFile = SproutGoogleRecaptcha::$app->recaptcha->getScript();
-                Craft::$app->view->registerJsFile($googleRecaptchaFile);
-                return SproutGoogleRecaptcha::$app->recaptcha->getHtml();
-            }
-
-            return '';
-        });
+//        Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
+//
+//            $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+//
+//            if ($sproutFormsSettings->enableCaptchas && $sproutFormsSettings->enableGoogleRecaptcha){
+//
+//                $googleRecaptchaFile = SproutInvisibleCaptcha::$app->recaptcha->getScript();
+//                Craft::$app->view->registerJsFile($googleRecaptchaFile);
+//
+//                return SproutInvisibleCaptcha::$app->recaptcha->getHtml();
+//            }
+//
+//            return '';
+//        });
     }
 
 }

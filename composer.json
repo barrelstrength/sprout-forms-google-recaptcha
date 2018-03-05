@@ -22,7 +22,8 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0-RC1"
+        "craftcms/cms": "^3.0.0-RC1",
+        "barrelstrength/sprout-forms": "^3.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -32,12 +33,12 @@
     "extra": {
         "name": "Sprout Google Recaptcha",
         "handle": "sprout-google-recaptcha",
-        "hasCpSettings": true,
-        "hasCpSection": false,
-        "changelogUrl": "https://raw.githubusercontent.com/barrelstrength/craft-sprout-google-recaptcha /sprout-google-recaptcha/master/CHANGELOG.md",
-        "components": {
-            "app": "barrelstrength\\sproutgooglerecaptcha\\services\\App"
-        },
+        "schemaVersion": "3.0.0",
+        "developer": "Barrel Strength",
+        "developerUrl": "https://barrelstrengthdesign.com",
+        "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/google-recaptcha",
+        "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-google-recaptcha/master/CHANGELOG.md",
+        "downloadUrl": "https://github.com/BarrelStrength/sprout-google-recaptcha/archive/master.zip",
         "class": "barrelstrength\\sproutgooglerecaptcha\\SproutGoogleRecaptcha"
     }
 }
