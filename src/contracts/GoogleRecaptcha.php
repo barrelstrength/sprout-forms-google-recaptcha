@@ -220,43 +220,52 @@ class GoogleRecaptcha
     /**
      * Checks the code given by the captcha
      *
-     * @param string $response $_POST['g-recaptcha-response']
+     * @param string $gRecaptcha $_POST['g-recaptcha-response']
      *
      * @return array|null
      */
-    public function getResponse($response)
+    public function getResponse($gRecaptcha)
     {
-        if (empty($response) || is_null($this->secretKey)) {
-            return ['success' => false, 'message' => "Can't be blank"];
+        $verifyResponse = null;
+        $response = [
+            'success' => false,
+            'message' => ''
+        ];
+
+        if (empty($gRecaptcha) || is_null($this->secretKey)) {
+            $response['message'] = "Can't be blank";
+            return $response;
         }
 
         $params = [
             'secret' => $this->secretKey,
-            'response' => $response,
+            'response' => $gRecaptcha,
             'remoteip' => $this->remoteIp,
         ];
 
-        $url = self::VERIFY_URL.'?'.http_build_query($params);
-
         if (function_exists('curl_version')) {
-            $curl = curl_init($url);
-            curl_setopt($curl, CURLOPT_HEADER, false);
+            $curl = curl_init(self::VERIFY_URL);
+            curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_TIMEOUT, $this->verifyTimeout);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+
             // @todo test this on live server
             if (Craft::$app->getConfig()->getGeneral()->devMode){
                 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             }
-            $response = curl_exec($curl);
+            $verifyResponse = curl_exec($curl);
         } else {
-            $response = file_get_contents($url);
+            $url = self::VERIFY_URL.'?'.http_build_query($params);
+            $verifyResponse = file_get_contents($url);
         }
 
-        if (empty($response) || is_null($response)) {
-            return null;
+        if (empty($verifyResponse) || is_null($verifyResponse)) {
+            $response['message'] = "Something went wrong";
+            return $response;
         }
 
-        $json = json_decode($response);
+        $json = json_decode($verifyResponse);
 
         return $json;
     }
