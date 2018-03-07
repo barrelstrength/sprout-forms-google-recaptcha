@@ -1,36 +1,20 @@
-{# @var craft \craft\web\twig\variables\CraftVariable #}
-{#
-/**
- * Sprout Google Recaptcha plugin for Craft CMS 3.x
- *
- * Sprout Google Recaptcha Settings.twig
- *
- * @author    Barrel Strength
- * @copyright Copyright (c) 2018 Barrel Strength
- * @link      https://www.barrelstrengthdesign.com/
- * @package   SproutGoogleRecaptcha
- * @since     1.0.0
- */
-#}
-
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
     label: 'Site Key',
     instructions: 'Get the site key on your dashboard',
     id: 'googleRecaptchaSiteKey',
-    name: 'googleRecaptchaSiteKey',
+    name: 'captchaSettings[googleRecaptchaSiteKey]',
     required: true,
     errors: null,
-    value: settings['googleRecaptchaSiteKey']})
-}}
+    value: settings['googleRecaptchaSiteKey'] ?? null
+}) }}
 
 {{ forms.textField({
     label: 'Secret key',
     instructions: 'Get the secret key on your dashboard',
     id: 'googleRecaptchaSecretKey',
-    name: 'googleRecaptchaSecretKey',
-    type: 'password',
+    name: 'captchaSettings[googleRecaptchaSecretKey]',
     required: true,
-    value: settings['googleRecaptchaSecretKey']})
-}}
+    value: settings['googleRecaptchaSecretKey'] ?? null
+}) }}

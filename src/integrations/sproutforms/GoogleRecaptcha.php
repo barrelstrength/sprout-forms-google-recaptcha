@@ -33,7 +33,10 @@ class GoogleRecaptcha extends BaseCaptcha
     public function getCaptchaSettingsHtml()
     {
         $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-        $html = Craft::$app->getView()->renderTemplate('sprout-google-recaptcha/_settings', ['settings' => $sproutFormsSettings]);
+
+        $html = Craft::$app->getView()->renderTemplate('sprout-google-recaptcha/_settings', [
+            'settings' => $sproutFormsSettings->captchaSettings
+        ]);
         return $html;
     }
 
@@ -186,10 +189,10 @@ class GoogleRecaptcha extends BaseCaptcha
      */
     public function __construct()
     {
-        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-        $this->siteKey = $sproutFormsSettings->googleRecaptchaSiteKey;
-        $this->secretKey = $sproutFormsSettings->googleRecaptchaSecretKey;
-        $this->remoteIp = $_SERVER['REMOTE_ADDR'];
+//        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+//        $this->siteKey = $sproutFormsSettings->googleRecaptchaSiteKey;
+//        $this->secretKey = $sproutFormsSettings->googleRecaptchaSecretKey;
+//        $this->remoteIp = $_SERVER['REMOTE_ADDR'];
     }
 
     /**
