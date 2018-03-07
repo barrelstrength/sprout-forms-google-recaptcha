@@ -48,35 +48,6 @@ class Recaptcha extends Component
         return $this->recaptcha->getResponse($response);
     }
 
-    /**
-     * Verify Submission
-     *
-     * @return boolean
-     */
-    public function verifySubmission() : array
-    {
-        $response = [
-            'success' => false,
-            'message' => ''
-        ];
-        // Only do this on the front-end
-        if (Craft::$app->getRequest()->getIsCpRequest()) {
-            return $response;
-        }
-
-        if (!isset($_POST['g-recaptcha-response'])){
-            $response['message'] = "Google recaptcha can't be blank";
-            return $response;
-        }
-
-        $gRecaptcha = $_POST['g-recaptcha-response'] ?? null;
-
-        $googleResponse = $this->getResponse($gRecaptcha);
-
-        return $googleResponse;
-    }
-
-
     /*
      * HTML for Form
      *

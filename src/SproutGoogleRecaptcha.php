@@ -65,30 +65,6 @@ class SproutGoogleRecaptcha extends Plugin
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
             $event->types[] = GoogleRecaptcha::class;
         });
-
-
-//        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
-//            $response = SproutInvisibleCaptcha::$app->recaptcha->verifySubmission();
-//            if (!$response->success){
-//                $event->entry->addError('googleRecaptcha', 'ups!');
-//            }
-//        });
-
-        // Support for displayForm() GoogleRecaptcha output via Hook (if enabled)
-//        Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
-//
-//            $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-//
-//            if ($sproutFormsSettings->enableCaptchas && $sproutFormsSettings->enableGoogleRecaptcha){
-//
-//                $googleRecaptchaFile = SproutInvisibleCaptcha::$app->recaptcha->getScript();
-//                Craft::$app->view->registerJsFile($googleRecaptchaFile);
-//
-//                return SproutInvisibleCaptcha::$app->recaptcha->getHtml();
-//            }
-//
-//            return '';
-//        });
     }
 
 }
