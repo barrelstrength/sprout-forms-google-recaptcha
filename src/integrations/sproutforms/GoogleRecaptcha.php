@@ -20,87 +20,6 @@ use Craft;
  */
 class GoogleRecaptcha extends BaseCaptcha
 {
-    public function getName()
-    {
-        return 'Google Recaptcha';
-    }
-
-    /**
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     */
-    public function getCaptchaSettingsHtml()
-    {
-        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-
-        $html = Craft::$app->getView()->renderTemplate('sprout-google-recaptcha/_settings', [
-            'settings' => $sproutFormsSettings->captchaSettings
-        ]);
-        return $html;
-    }
-
-    public function getCaptchaHtml()
-    {
-        $googleRecaptchaFile = $this->getScript();
-        Craft::$app->view->registerJsFile($googleRecaptchaFile);
-        $html = '';
-
-        if (!empty($this->siteKey)) {
-            $data = 'data-sitekey="'.$this->siteKey.'"';
-
-            if (!is_null($this->theme)) {
-                $data .= ' data-theme="'.$this->theme.'"';
-            }
-
-            if (!is_null($this->type)) {
-                $data .= ' data-type="'.$this->type.'"';
-            }
-
-            if (!is_null($this->size)) {
-                $data .= ' data-size="'.$this->size.'"';
-            }
-
-            $html = '<div class="g-recaptcha" '.$data.'></div>';
-        }
-
-        return $html;
-    }
-
-    /**
-     * Verify Submission
-     * @param $event
-     * @return boolean
-     */
-    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
-    {
-        // Only do this on the front-end
-        if (Craft::$app->getRequest()->getIsCpRequest()) {
-            return true;
-        }
-
-        if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])){
-            $event->isValid = false;
-            $event->errors['google-recaptcha'] = "Google recaptcha can't be blank";
-            return false;
-        }
-
-        $gRecaptcha = $_POST['g-recaptcha-response'] ?? null;
-
-        $googleResponse = $this->getResponse($gRecaptcha);
-
-        if (isset($googleResponse['error-codes'])){
-            foreach ($googleResponse['error-codes'] as $key => $errorCode) {
-                $event->errors['google-recaptcha-'.$key] = $errorCode;
-            }
-        }
-
-        $event->isValid = $googleResponse['success'];
-
-        return $googleResponse['success'] ?? false;
-    }
-
-
     /**
      * ReCAPTCHA URL verifying
      *
@@ -189,10 +108,90 @@ class GoogleRecaptcha extends BaseCaptcha
      */
     public function __construct()
     {
-//        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-//        $this->siteKey = $sproutFormsSettings->googleRecaptchaSiteKey;
-//        $this->secretKey = $sproutFormsSettings->googleRecaptchaSecretKey;
-//        $this->remoteIp = $_SERVER['REMOTE_ADDR'];
+        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        $this->siteKey = $sproutFormsSettings->captchaSettings['googleRecaptchaSiteKey'] ?? null;
+        $this->secretKey = $sproutFormsSettings->captchaSettings['googleRecaptchaSecretKey'] ?? null;
+        $this->remoteIp = $_SERVER['REMOTE_ADDR'];
+    }
+
+    public function getName()
+    {
+        return 'Google Recaptcha';
+    }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function getCaptchaSettingsHtml()
+    {
+        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+
+        $html = Craft::$app->getView()->renderTemplate('sprout-google-recaptcha/_settings', [
+            'settings' => $sproutFormsSettings->captchaSettings
+        ]);
+        return $html;
+    }
+
+    public function getCaptchaHtml()
+    {
+        $googleRecaptchaFile = $this->getScript();
+        Craft::$app->view->registerJsFile($googleRecaptchaFile);
+        $html = '';
+
+        if (!empty($this->siteKey)) {
+            $data = 'data-sitekey="'.$this->siteKey.'"';
+
+            if (!is_null($this->theme)) {
+                $data .= ' data-theme="'.$this->theme.'"';
+            }
+
+            if (!is_null($this->type)) {
+                $data .= ' data-type="'.$this->type.'"';
+            }
+
+            if (!is_null($this->size)) {
+                $data .= ' data-size="'.$this->size.'"';
+            }
+
+            $html = '<div class="g-recaptcha" '.$data.'></div>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Verify Submission
+     * @param $event
+     * @return boolean
+     */
+    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
+    {
+        // Only do this on the front-end
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+            return true;
+        }
+
+        if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])){
+            $event->isValid = false;
+            $event->errors['google-recaptcha'] = "Google recaptcha can't be blank";
+            return false;
+        }
+
+        $gRecaptcha = $_POST['g-recaptcha-response'] ?? null;
+
+        $googleResponse = $this->getResponse($gRecaptcha);
+
+        if (isset($googleResponse['error-codes'])){
+            foreach ($googleResponse['error-codes'] as $key => $errorCode) {
+                $event->errors['google-recaptcha-'.$key] = $errorCode;
+            }
+        }
+
+        $event->isValid = $googleResponse['success'];
+
+        return $googleResponse['success'] ?? false;
     }
 
     /**
