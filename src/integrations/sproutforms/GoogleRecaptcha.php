@@ -108,9 +108,9 @@ class GoogleRecaptcha extends BaseCaptcha
      */
     public function __construct()
     {
-        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-        $this->siteKey = $sproutFormsSettings->captchaSettings['googleRecaptchaSiteKey'] ?? null;
-        $this->secretKey = $sproutFormsSettings->captchaSettings['googleRecaptchaSecretKey'] ?? null;
+        $settings = $this->getSettings();
+        $this->siteKey = $settings['googleRecaptchaSiteKey'] ?? null;
+        $this->secretKey = $settings['googleRecaptchaSecretKey'] ?? null;
         $this->remoteIp = $_SERVER['REMOTE_ADDR'];
     }
 
@@ -126,10 +126,11 @@ class GoogleRecaptcha extends BaseCaptcha
      */
     public function getCaptchaSettingsHtml()
     {
-        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        $settings = $this->getSettings();
 
         $html = Craft::$app->getView()->renderTemplate('sprout-google-recaptcha/_settings', [
-            'settings' => $sproutFormsSettings->captchaSettings
+            'settings' => $settings,
+            'captchaId' => $this->getCaptchaId()
         ]);
         return $html;
     }
@@ -175,7 +176,7 @@ class GoogleRecaptcha extends BaseCaptcha
 
         if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])){
             $event->isValid = false;
-            $event->errors['google-recaptcha'] = "Google recaptcha can't be blank";
+            $event->errors[$this->getCaptchaId()][] = "Google recaptcha can't be blank";
             return false;
         }
 
@@ -185,7 +186,7 @@ class GoogleRecaptcha extends BaseCaptcha
 
         if (isset($googleResponse['error-codes'])){
             foreach ($googleResponse['error-codes'] as $key => $errorCode) {
-                $event->errors['google-recaptcha-'.$key] = $errorCode;
+                $event->errors[$this->getCaptchaId()][] = $errorCode;
             }
         }
 

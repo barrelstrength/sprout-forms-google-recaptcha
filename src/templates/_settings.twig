@@ -4,7 +4,7 @@
     label: 'Site Key',
     instructions: 'Get the site key on your dashboard',
     id: 'googleRecaptchaSiteKey',
-    name: 'captchaSettings[googleRecaptchaSiteKey]',
+    name: 'captchaSettings['~captchaId~'][googleRecaptchaSiteKey]',
     required: true,
     errors: null,
     value: settings['googleRecaptchaSiteKey'] ?? null
@@ -14,7 +14,7 @@
     label: 'Secret key',
     instructions: 'Get the secret key on your dashboard',
     id: 'googleRecaptchaSecretKey',
-    name: 'captchaSettings[googleRecaptchaSecretKey]',
+    name: 'captchaSettings['~captchaId~'][googleRecaptchaSecretKey]',
     required: true,
     value: settings['googleRecaptchaSecretKey'] ?? null
 }) }}
