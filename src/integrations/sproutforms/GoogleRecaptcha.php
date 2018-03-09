@@ -119,6 +119,11 @@ class GoogleRecaptcha extends BaseCaptcha
         return 'Google Recaptcha';
     }
 
+    public function getDescription()
+    {
+        return Craft::t('sprout-invisible-captcha','Adds Google reCAPTCHA to sprout forms.');
+    }
+
     /**
      * @return string
      * @throws \Twig_Error_Loader
