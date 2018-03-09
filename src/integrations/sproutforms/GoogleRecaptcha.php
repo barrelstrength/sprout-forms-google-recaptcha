@@ -144,6 +144,21 @@ class GoogleRecaptcha extends BaseCaptcha
     {
         $googleRecaptchaFile = $this->getScript();
         Craft::$app->view->registerJsFile($googleRecaptchaFile);
+        Craft::$app->view->registerJs("window.onload = function() {
+            var recaptcha = document.querySelector('#g-recaptcha-response');
+            if(recaptcha) {
+                recaptcha.setAttribute('required', 'required');
+            }
+        };");
+        Craft::$app->view->registerCss("#g-recaptcha-response {
+    display: block !important;
+    position: absolute;
+    margin: -78px 0 0 0 !important;
+    width: 302px !important;
+    height: 76px !important;
+    z-index: -999999;
+    opacity: 0;
+}");
         $html = '';
 
         if (!empty($this->siteKey)) {
@@ -181,7 +196,7 @@ class GoogleRecaptcha extends BaseCaptcha
 
         if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])){
             $event->isValid = false;
-            $event->errors[$this->getCaptchaId()][] = "Google recaptcha can't be blank";
+            $event->errors[$this->getCaptchaId()] = "Google recaptcha can't be blank";
             return false;
         }
 
@@ -191,7 +206,7 @@ class GoogleRecaptcha extends BaseCaptcha
 
         if (isset($googleResponse['error-codes'])){
             foreach ($googleResponse['error-codes'] as $key => $errorCode) {
-                $event->errors[$this->getCaptchaId()][] = $errorCode;
+                $event->errors[$this->getCaptchaId()] = $errorCode;
             }
         }
 

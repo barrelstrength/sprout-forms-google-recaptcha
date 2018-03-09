@@ -56,12 +56,6 @@ class SproutGoogleRecaptcha extends Plugin
     {
         parent::init();
 
-        self::$app = $this;
-
-        $this->setComponents([
-            'app' => App::class
-        ]);
-
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
             $event->types[] = GoogleRecaptcha::class;
         });
