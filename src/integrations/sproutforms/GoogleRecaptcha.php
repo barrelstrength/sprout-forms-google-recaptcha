@@ -147,18 +147,18 @@ class GoogleRecaptcha extends BaseCaptcha
         Craft::$app->view->registerJs("window.onload = function() {
             var recaptcha = document.querySelector('#g-recaptcha-response');
             if(recaptcha) {
-                recaptcha.setAttribute('required', 'required');
+                recaptcha.setAttribute('required', '');
             }
         };");
         Craft::$app->view->registerCss("#g-recaptcha-response {
-    display: block !important;
-    position: absolute;
-    margin: -78px 0 0 0 !important;
-    width: 302px !important;
-    height: 76px !important;
-    z-index: -999999;
-    opacity: 0;
-}");
+            display: block !important;
+            position: absolute;
+            margin: -78px 0 0 0 !important;
+            width: 302px !important;
+            height: 76px !important;
+            z-index: -999999;
+            opacity: 0;
+           }");
         $html = '';
 
         if (!empty($this->siteKey)) {
