@@ -27,7 +27,7 @@ use yii\base\Event;
  * Class SproutFormsGoogleRecaptcha
  *
  * @author    Barrel Strength
- * @package   SproutGoogleRecaptcha
+ * @package   SproutFormsGoogleRecaptcha
  * @since     1.0.0
  *
  * @property  RecaptchaService $recaptcha

@@ -10,7 +10,7 @@
 
 /**
  * @author    Barrel Strength
- * @package   SproutGoogleRecaptcha
+ * @package   SproutFormsGoogleRecaptcha
  * @since     1.0.0
  */
 return [];

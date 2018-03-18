@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 Barrel Strength
  */
 
-namespace barrelstrength\sproutgooglerecaptcha\integrations\sproutforms;
+namespace barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms;
 
 use barrelstrength\sproutforms\contracts\BaseCaptcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
