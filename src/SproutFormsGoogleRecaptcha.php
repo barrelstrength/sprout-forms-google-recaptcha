@@ -8,12 +8,12 @@
  * @copyright Copyright (c) 2018 Barrel Strength
  */
 
-namespace barrelstrength\sproutgooglerecaptcha;
+namespace barrelstrength\sproutformsgooglerecaptcha;
 
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutgooglerecaptcha\integrations\sproutforms\GoogleRecaptcha;
-use barrelstrength\sproutgooglerecaptcha\services\App;
-use barrelstrength\sproutgooglerecaptcha\services\Recaptcha as RecaptchaService;
+use barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\GoogleRecaptcha;
+use barrelstrength\sproutformsgooglerecaptcha\services\App;
+use barrelstrength\sproutformsgooglerecaptcha\services\Recaptcha as RecaptchaService;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 
@@ -24,7 +24,7 @@ use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use yii\base\Event;
 
 /**
- * Class SproutGoogleRecaptcha
+ * Class SproutFormsGoogleRecaptcha
  *
  * @author    Barrel Strength
  * @package   SproutGoogleRecaptcha
@@ -32,10 +32,10 @@ use yii\base\Event;
  *
  * @property  RecaptchaService $recaptcha
  */
-class SproutGoogleRecaptcha extends Plugin
+class SproutFormsGoogleRecaptcha extends Plugin
 {
     /**
-     * @var SproutInvisibleCaptcha
+     * @var SproutFormsGoogleRecaptcha
      */
     public static $app;
 

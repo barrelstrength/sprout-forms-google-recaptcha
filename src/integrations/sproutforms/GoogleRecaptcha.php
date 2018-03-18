@@ -121,7 +121,7 @@ class GoogleRecaptcha extends BaseCaptcha
 
     public function getDescription()
     {
-        return Craft::t('sprout-invisible-captcha','Adds Google reCAPTCHA to sprout forms.');
+        return Craft::t('sprout-forms-google-recaptcha','Adds Google reCAPTCHA to sprout forms.');
     }
 
     /**
@@ -133,7 +133,7 @@ class GoogleRecaptcha extends BaseCaptcha
     {
         $settings = $this->getSettings();
 
-        $html = Craft::$app->getView()->renderTemplate('sprout-google-recaptcha/_settings', [
+        $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_settings', [
             'settings' => $settings,
             'captchaId' => $this->getCaptchaId()
         ]);
@@ -329,7 +329,7 @@ class GoogleRecaptcha extends BaseCaptcha
             $googleResponse =  json_decode($response->getBody()->getContents(), true);
 
         } catch (\Throwable $e) {
-            Craft::error('sprout-google-recaptcha',$e->getMessage());
+            Craft::error('sprout-forms-google-recaptcha',$e->getMessage());
         }
 
         return $googleResponse;

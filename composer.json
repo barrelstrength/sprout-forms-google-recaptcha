@@ -1,6 +1,6 @@
 {
-    "name": "barrelstrength/sprout-google-recaptcha",
-    "description": "Google Recaptcha solution for Sprout Forms",
+    "name": "barrelstrength/sprout-forms-google-recaptcha",
+    "description": "Google Recaptcha for Sprout Forms",
     "type": "craft-plugin",
     "version": "1.0.0",
     "keywords": [
@@ -11,8 +11,8 @@
         "sprout google recaptcha"
     ],
     "support": {
-        "docs": "https://github.com/barrelstrength/craft-sprout-google-recaptcha /sprout-google-recaptcha/blob/master/README.md",
-        "issues": "https://github.com/barrelstrength/craft-sprout-google-recaptcha /sprout-google-recaptcha/issues"
+        "docs": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha /sprout-forms-google-recaptcha/blob/master/README.md",
+        "issues": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha /sprout-forms-google-recaptcha/issues"
     },
     "license": "MIT",
     "authors": [
@@ -27,18 +27,18 @@
     },
     "autoload": {
         "psr-4": {
-          "barrelstrength\\sproutgooglerecaptcha\\": "src/"
+          "barrelstrength\\sproutformsgooglerecaptcha\\": "src/"
         }
     },
     "extra": {
         "name": "Sprout Google Recaptcha",
-        "handle": "sprout-google-recaptcha",
+        "handle": "sprout-forms-google-recaptcha",
         "schemaVersion": "3.0.0",
         "developer": "Barrel Strength",
         "developerUrl": "https://barrelstrengthdesign.com",
         "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/google-recaptcha",
-        "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-google-recaptcha/master/CHANGELOG.md",
-        "downloadUrl": "https://github.com/BarrelStrength/sprout-google-recaptcha/archive/master.zip",
-        "class": "barrelstrength\\sproutgooglerecaptcha\\SproutGoogleRecaptcha"
+        "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-forms-google-recaptcha/master/CHANGELOG.md",
+        "downloadUrl": "https://github.com/BarrelStrength/sprout-forms-google-recaptcha/archive/master.zip",
+        "class": "barrelstrength\\sproutformsgooglerecaptcha\\SproutFormsGoogleRecaptcha"
     }
 }
