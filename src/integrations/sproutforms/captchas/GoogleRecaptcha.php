@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2018 Barrel Strength
  */
 
-namespace barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms;
+namespace barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas;
 
-use barrelstrength\sproutforms\contracts\BaseCaptcha;
+use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
 
@@ -18,7 +18,7 @@ use Craft;
  * Google reCAPTCHA v2 class
  *
  */
-class GoogleRecaptcha extends BaseCaptcha
+class GoogleRecaptcha extends Captcha
 {
     /**
      * ReCAPTCHA URL verifying
@@ -125,7 +125,9 @@ class GoogleRecaptcha extends BaseCaptcha
     }
 
     /**
-     * @return string
+     * @inheritdoc
+     *
+     * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
@@ -133,7 +135,7 @@ class GoogleRecaptcha extends BaseCaptcha
     {
         $settings = $this->getSettings();
 
-        $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_settings', [
+        $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/settings', [
             'settings' => $settings,
             'captchaId' => $this->getCaptchaId()
         ]);
@@ -143,14 +145,17 @@ class GoogleRecaptcha extends BaseCaptcha
     public function getCaptchaHtml()
     {
         $googleRecaptchaFile = $this->getScript();
+
         Craft::$app->view->registerJsFile($googleRecaptchaFile);
+
         Craft::$app->view->registerJs("window.onload = function() {
             var recaptcha = document.querySelector('#g-recaptcha-response');
             if(recaptcha) {
                 recaptcha.setAttribute('required', '');
             }
         };");
-        Craft::$app->view->registerCss("#g-recaptcha-response {
+
+        Craft::$app->view->registerCss('#g-recaptcha-response {
             display: block !important;
             position: absolute;
             margin: -78px 0 0 0 !important;
@@ -158,7 +163,8 @@ class GoogleRecaptcha extends BaseCaptcha
             height: 76px !important;
             z-index: -999999;
             opacity: 0;
-           }");
+           }');
+
         $html = '';
 
         if (!empty($this->siteKey)) {
@@ -183,9 +189,9 @@ class GoogleRecaptcha extends BaseCaptcha
     }
 
     /**
-     * Verify Submission
-     * @param $event
-     * @return boolean
+     * @inheritdoc
+     *
+     * @throws \ReflectionException
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {
@@ -298,7 +304,8 @@ class GoogleRecaptcha extends BaseCaptcha
      *
      * @param string $gRecaptcha $_POST['g-recaptcha-response']
      *
-     * @return array|null
+     * @return array|mixed|\Psr\Http\Message\ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getResponse($gRecaptcha)
     {

@@ -33,7 +33,6 @@
     "extra": {
         "name": "Sprout Google Recaptcha",
         "handle": "sprout-forms-google-recaptcha",
-        "schemaVersion": "3.0.0",
         "developer": "Barrel Strength",
         "developerUrl": "https://barrelstrengthdesign.com",
         "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/google-recaptcha",

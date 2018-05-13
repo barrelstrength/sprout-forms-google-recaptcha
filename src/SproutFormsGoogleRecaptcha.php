@@ -11,16 +11,8 @@
 namespace barrelstrength\sproutformsgooglerecaptcha;
 
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\GoogleRecaptcha;
-use barrelstrength\sproutformsgooglerecaptcha\services\App;
-use barrelstrength\sproutformsgooglerecaptcha\services\Recaptcha as RecaptchaService;
-use barrelstrength\sproutforms\services\Entries;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
-
-use Craft;
+use barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas\GoogleRecaptcha;
 use craft\base\Plugin;
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
-
 use yii\base\Event;
 
 /**
@@ -35,19 +27,19 @@ use yii\base\Event;
 class SproutFormsGoogleRecaptcha extends Plugin
 {
     /**
-     * @var SproutFormsGoogleRecaptcha
+     * @var bool
      */
-    public static $app;
+    public $hasCpSettings = true;
+
+    /**
+     * @var bool
+     */
+    public $hasCpSection = false;
 
     /**
      * @var string
      */
     public $schemaVersion = '1.0.0';
-
-
-    public $hasCpSettings = true;
-
-    public $hasCpSection = false;
 
     /**
      * @inheritdoc
