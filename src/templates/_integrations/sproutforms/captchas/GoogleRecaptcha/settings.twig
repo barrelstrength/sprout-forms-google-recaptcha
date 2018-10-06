@@ -2,7 +2,7 @@
 
 {{ forms.textField({
     label: 'Site Key',
-    instructions: 'Get the site key on your dashboard',
+    instructions: 'Create or get the site key in your <a href="https://www.google.com/recaptcha/admin">dashboard</a>',
     id: 'googleRecaptchaSiteKey',
     name: 'captchaSettings['~captchaId~'][googleRecaptchaSiteKey]',
     required: true,
@@ -12,7 +12,7 @@
 
 {{ forms.textField({
     label: 'Secret key',
-    instructions: 'Get the secret key on your dashboard',
+    instructions: 'Create or get the secret key in your <a href="https://www.google.com/recaptcha/admin">dashboard</a>',
     id: 'googleRecaptchaSecretKey',
     name: 'captchaSettings['~captchaId~'][googleRecaptchaSecretKey]',
     required: true,

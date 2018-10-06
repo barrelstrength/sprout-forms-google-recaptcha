@@ -121,7 +121,7 @@ class GoogleRecaptcha extends Captcha
 
     public function getDescription()
     {
-        return Craft::t('sprout-forms-google-recaptcha','Adds Google reCAPTCHA to sprout forms.');
+        return Craft::t('sprout-forms-google-recaptcha','Adds Google reCAPTCHA to Sprout Forms');
     }
 
     /**
