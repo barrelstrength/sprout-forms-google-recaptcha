@@ -7,7 +7,8 @@
     "craft",
     "cms",
     "craftcms",
-    "craft-plugin",
+    "forms",
+    "sprout forms",
     "sprout google recaptcha"
   ],
   "support": {

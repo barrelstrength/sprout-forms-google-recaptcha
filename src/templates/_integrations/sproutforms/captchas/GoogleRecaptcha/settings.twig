@@ -1,8 +1,10 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-    label: 'Site Key',
-    instructions: 'Create or get the site key in your <a href="https://www.google.com/recaptcha/admin">dashboard</a>',
+    label: 'Site Key'|t('sprout-forms-google-recaptcha'),
+    instructions: 'Manage your Google reCAPTCHA <a href="{url}">API key settings</a>.'|t('sprout-forms-google-recaptcha', {
+        url: 'https://www.google.com/recaptcha/admin'
+    }),
     id: 'googleRecaptchaSiteKey',
     name: 'captchaSettings['~captchaId~'][googleRecaptchaSiteKey]',
     required: true,
@@ -11,8 +13,10 @@
 }) }}
 
 {{ forms.textField({
-    label: 'Secret key',
-    instructions: 'Create or get the secret key in your <a href="https://www.google.com/recaptcha/admin">dashboard</a>',
+    label: 'Secret key'|t('sprout-forms-google-recaptcha'),
+    instructions: 'Manage your Google reCAPTCHA <a href="{url}">API key settings</a>.'|t('sprout-forms-google-recaptcha', {
+        url: 'https://www.google.com/recaptcha/admin'
+    }),
     id: 'googleRecaptchaSecretKey',
     name: 'captchaSettings['~captchaId~'][googleRecaptchaSecretKey]',
     required: true,
