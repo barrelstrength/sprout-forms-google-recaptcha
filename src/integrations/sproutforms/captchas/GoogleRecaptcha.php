@@ -44,7 +44,7 @@ class GoogleRecaptcha extends Captcha
      *
      * @var string
      */
-    private  $remoteIp = null;
+    private $remoteIp = null;
 
     /**
      * Supported themes
@@ -121,7 +121,7 @@ class GoogleRecaptcha extends Captcha
 
     public function getDescription()
     {
-        return Craft::t('sprout-forms-google-recaptcha','Adds Google reCAPTCHA to Sprout Forms');
+        return Craft::t('sprout-forms-google-recaptcha', 'Adds Google reCAPTCHA to Sprout Forms');
     }
 
     /**
@@ -200,7 +200,7 @@ class GoogleRecaptcha extends Captcha
             return true;
         }
 
-        if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])){
+        if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
             $event->isValid = false;
             $event->errors[$this->getCaptchaId()] = "Google recaptcha can't be blank";
             return false;
@@ -210,7 +210,7 @@ class GoogleRecaptcha extends Captcha
 
         $googleResponse = $this->getResponse($gRecaptcha);
 
-        if (isset($googleResponse['error-codes'])){
+        if (isset($googleResponse['error-codes'])) {
             foreach ($googleResponse['error-codes'] as $key => $errorCode) {
                 $event->errors[$this->getCaptchaId()] = $errorCode;
             }
@@ -333,10 +333,9 @@ class GoogleRecaptcha extends Captcha
                 'query' => $params
             ]);
 
-            $googleResponse =  json_decode($response->getBody()->getContents(), true);
-
+            $googleResponse = json_decode($response->getBody()->getContents(), true);
         } catch (\Throwable $e) {
-            Craft::error('sprout-forms-google-recaptcha',$e->getMessage());
+            Craft::error('sprout-forms-google-recaptcha', $e->getMessage());
         }
 
         return $googleResponse;

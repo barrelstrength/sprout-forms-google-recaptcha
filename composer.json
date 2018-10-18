@@ -1,43 +1,43 @@
 {
-    "name": "barrelstrength/sprout-forms-google-recaptcha",
-    "description": "Google Recaptcha for Sprout Forms",
-    "type": "craft-plugin",
-    "version": "1.0.0",
-    "keywords": [
-        "craft",
-        "cms",
-        "craftcms",
-        "craft-plugin",
-        "sprout google recaptcha"
-    ],
-    "support": {
-        "docs": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/sprout-forms-google-recaptcha/blob/master/README.md",
-        "issues": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/sprout-forms-google-recaptcha/issues"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Barrel Strength",
-            "homepage": "https://www.barrelstrengthdesign.com/"
-        }
-    ],
-    "require": {
-        "craftcms/cms": "^3.0.0",
-        "barrelstrength/sprout-forms": "^3.0.0"
-    },
-    "autoload": {
-        "psr-4": {
-          "barrelstrength\\sproutformsgooglerecaptcha\\": "src/"
-        }
-    },
-    "extra": {
-        "name": "Sprout Google Recaptcha",
-        "handle": "sprout-forms-google-recaptcha",
-        "developer": "Barrel Strength",
-        "developerUrl": "https://barrelstrengthdesign.com",
-        "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/forms/custom-captchas.html#register-event",
-        "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-forms-google-recaptcha/master/CHANGELOG.md",
-        "downloadUrl": "https://github.com/BarrelStrength/sprout-forms-google-recaptcha/archive/master.zip",
-        "class": "barrelstrength\\sproutformsgooglerecaptcha\\SproutFormsGoogleRecaptcha"
+  "name": "barrelstrength/sprout-forms-google-recaptcha",
+  "description": "Google Recaptcha for Sprout Forms",
+  "type": "craft-plugin",
+  "version": "1.0.0",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "sprout google recaptcha"
+  ],
+  "support": {
+    "docs": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/sprout-forms-google-recaptcha/blob/master/README.md",
+    "issues": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/sprout-forms-google-recaptcha/issues"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Barrel Strength",
+      "homepage": "https://www.barrelstrengthdesign.com/"
     }
+  ],
+  "require": {
+    "craftcms/cms": "^3.0.0",
+    "barrelstrength/sprout-forms": "^3.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "barrelstrength\\sproutformsgooglerecaptcha\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Sprout Google Recaptcha",
+    "handle": "sprout-forms-google-recaptcha",
+    "developer": "Barrel Strength",
+    "developerUrl": "https://barrelstrengthdesign.com",
+    "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/forms/custom-captchas.html#register-event",
+    "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-forms-google-recaptcha/master/CHANGELOG.md",
+    "downloadUrl": "https://github.com/BarrelStrength/sprout-forms-google-recaptcha/archive/master.zip",
+    "class": "barrelstrength\\sproutformsgooglerecaptcha\\SproutFormsGoogleRecaptcha"
+  }
 }
