@@ -32,7 +32,7 @@
     }
   },
   "extra": {
-    "name": "Sprout Google Recaptcha",
+    "name": "Google Recaptcha for Sprout Forms",
     "handle": "sprout-forms-google-recaptcha",
     "developer": "Barrel Strength",
     "developerUrl": "https://barrelstrengthdesign.com",
