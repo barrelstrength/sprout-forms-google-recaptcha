@@ -146,7 +146,7 @@ class GoogleRecaptcha extends Captcha
     {
         $googleRecaptchaFile = $this->getScript();
 
-        Craft::$app->view->registerJsFile($googleRecaptchaFile, ['defer' => 'defer']);
+        Craft::$app->view->registerJsFile($googleRecaptchaFile, ['defer' => 'defer', 'async' => 'async']);
 
         Craft::$app->view->registerJs("window.onload = function() {
             var recaptcha = document.querySelector('#g-recaptcha-response');
