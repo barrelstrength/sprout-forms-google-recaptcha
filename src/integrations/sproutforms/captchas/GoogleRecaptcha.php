@@ -13,6 +13,7 @@ namespace barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\cap
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
+use craft\web\View;
 
 /**
  * Google reCAPTCHA v2 class
@@ -153,7 +154,7 @@ class GoogleRecaptcha extends Captcha
             if(recaptcha) {
                 recaptcha.setAttribute('required', '');
             }
-        };");
+        };", View::POS_END);
 
         Craft::$app->view->registerCss('#g-recaptcha-response {
             display: block !important;
