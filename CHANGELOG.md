@@ -1,5 +1,13 @@
 # Sprout Google Recaptcha Changelog
 
+## 1.0.2 - 2018-11-26
+
+### Added
+- Added async and defer to the Google Recaptcha api.js
+
+### Updated
+- Updated JS to be rendered at the end of the document
+
 ## 1.0.1 - 2018-10-22
 
 ### Added
