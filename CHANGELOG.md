@@ -1,5 +1,15 @@
 # Sprout Google Recaptcha Changelog
 
+## 1.0.3 - 2019-03-15
+
+### Changed
+- Updated `EVENT_REGISTER_CAPTCHAS` Event to `RegisterComponentTypesEvent`
+
+### Fixed
+- Added support for Return Types on Captcha class ([#5])
+
+[#5]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/5
+
 ## 1.0.2 - 2018-11-26
 
 ### Added
