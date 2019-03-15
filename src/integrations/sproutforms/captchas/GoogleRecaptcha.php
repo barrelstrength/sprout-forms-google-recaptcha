@@ -1,8 +1,8 @@
 <?php
 /**
- * Sprout Google Recaptcha plugin for Craft CMS 3.x
+ * Sprout Google reCAPTCHA plugin for Craft CMS 3.x
  *
- * Google Recaptcha solution for Sprout Forms
+ * Google reCAPTCHA solution for Sprout Forms
  *
  * @link      https://www.barrelstrengthdesign.com/
  * @copyright Copyright (c) 2018 Barrel Strength
@@ -22,7 +22,7 @@ use craft\web\View;
 class GoogleRecaptcha extends Captcha
 {
     /**
-     * ReCAPTCHA URL verifying
+     * URL to use to verify reCAPTCHA
      *
      * @var string
      */
@@ -117,12 +117,12 @@ class GoogleRecaptcha extends Captcha
 
     public function getName(): string
     {
-        return 'Google Recaptcha';
+        return 'Google reCAPTCHA';
     }
 
     public function getDescription(): string
     {
-        return Craft::t('sprout-forms-google-recaptcha', 'Adds Google reCAPTCHA to Sprout Forms');
+        return Craft::t('sprout-forms-google-recaptcha', 'reCAPTCHA protects you against spam and other types of automated abuse.');
     }
 
     /**
@@ -203,7 +203,7 @@ class GoogleRecaptcha extends Captcha
 
         if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
             $event->isValid = false;
-            $event->errors[$this->getCaptchaId()] = "Google recaptcha can't be blank";
+            $event->errors[$this->getCaptchaId()] = "Google reCAPTCHA can't be blank";
             return false;
         }
 
