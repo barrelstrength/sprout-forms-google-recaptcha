@@ -1,14 +1,14 @@
-# Google Recaptcha for Sprout Forms
+# Google reCAPTCHA for Sprout Forms
 
-Add Google Recaptcha spam prevention to your Sprout Forms forms.
+Add Google reCAPTCHA spam prevention to your Sprout Forms forms.
 
 ## Usage
 
-Install Google Recaptcha for Sprout Forms alongside Sprout Forms.
+Install Google reCAPTCHA for Sprout Forms alongside Sprout Forms.
 
-Enable Google Recaptcha via your Sprout Forms settings:
+Enable Google reCAPTCHA via your Sprout Forms settings:
 
-- `Sprout Forms->Settings->Spam Prevention->Google Recaptcha`
+- `Sprout Forms->Settings->Spam Prevention->Google reCAPTCHA`
 
 See Sprout Forms documentation to learn more about Sprout Forms.
 
