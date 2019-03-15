@@ -115,12 +115,12 @@ class GoogleRecaptcha extends Captcha
         $this->remoteIp = $_SERVER['REMOTE_ADDR'];
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'Google Recaptcha';
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return Craft::t('sprout-forms-google-recaptcha', 'Adds Google reCAPTCHA to Sprout Forms');
     }
@@ -132,7 +132,7 @@ class GoogleRecaptcha extends Captcha
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getCaptchaSettingsHtml()
+    public function getCaptchaSettingsHtml(): string
     {
         $settings = $this->getSettings();
 
@@ -143,7 +143,7 @@ class GoogleRecaptcha extends Captcha
         return $html;
     }
 
-    public function getCaptchaHtml()
+    public function getCaptchaHtml(): string
     {
         $googleRecaptchaFile = $this->getScript();
 
