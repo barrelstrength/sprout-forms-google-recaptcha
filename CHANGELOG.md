@@ -1,5 +1,12 @@
 # Sprout Google Recaptcha Changelog
 
+## 1.0.4 - 2019-04-23
+
+### Changed
+- Removed unnecessary CSS ([#272])
+
+[#272]: https://github.com/barrelstrength/craft-sprout-forms/issues/272
+
 ## 1.0.3 - 2019-03-15
 
 ### Changed
