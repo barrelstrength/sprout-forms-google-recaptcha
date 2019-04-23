@@ -1,6 +1,15 @@
 # Google reCAPTCHA for Sprout Forms
 
-Add Google reCAPTCHA spam prevention to your Sprout Forms forms.
+Add Google reCAPTCHA spam prevention to your Sprout Forms forms. 
+
+The current plugin supports
+
+- [x] reCAPTCHA v2 - "I'm not a robot" Checkbox
+
+Future versions of the plugin [may support](https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/3)
+
+- [ ] reCAPTCHA v2 - Invisible reCAPTCHA badge
+- [ ] reCAPTCHA v3 - Verify requests with a score
 
 ## Usage
 
