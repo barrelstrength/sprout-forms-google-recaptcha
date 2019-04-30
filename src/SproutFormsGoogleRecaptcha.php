@@ -22,8 +22,6 @@ use yii\base\Event;
  * @author    Barrel Strength
  * @package   SproutFormsGoogleRecaptcha
  * @since     1.0.0
- *
- * @property  RecaptchaService $recaptcha
  */
 class SproutFormsGoogleRecaptcha extends Plugin
 {
@@ -33,23 +31,13 @@ class SproutFormsGoogleRecaptcha extends Plugin
     public $hasCpSettings = true;
 
     /**
-     * @var bool
-     */
-    public $hasCpSection = false;
-
-    /**
-     * @var string
-     */
-    public $schemaVersion = '1.0.0';
-
-    /**
      * @inheritdoc
      */
     public function init()
     {
         parent::init();
 
-        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(RegisterComponentTypesEvent $event) {
+        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = GoogleRecaptcha::class;
         });
     }

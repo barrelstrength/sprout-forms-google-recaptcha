@@ -14,6 +14,12 @@ use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
 use craft\web\View;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
+use Throwable;
+use Twig_Error_Loader;
+use yii\base\Exception;
 
 /**
  * Google reCAPTCHA v2 class
@@ -33,19 +39,19 @@ class GoogleRecaptcha extends Captcha
     /**
      * @var string
      */
-    private $siteKey = null;
+    private $siteKey;
 
     /**
      * @var string
      */
-    private $secretKey = null;
+    private $secretKey;
 
     /**
      * Remote IP address
      *
      * @var string
      */
-    private $remoteIp = null;
+    private $remoteIp;
 
     /**
      * Supported themes
@@ -61,7 +67,7 @@ class GoogleRecaptcha extends Captcha
      * @var string
      * @see https://developers.google.com/recaptcha/docs/display#config
      */
-    protected $theme = null;
+    protected $theme;
 
     /**
      * Supported types
@@ -77,7 +83,7 @@ class GoogleRecaptcha extends Captcha
      * @var string
      * @see https://developers.google.com/recaptcha/docs/display#config
      */
-    protected $type = null;
+    protected $type;
 
     /**
      * Captcha language. Default : auto-detect
@@ -85,7 +91,7 @@ class GoogleRecaptcha extends Captcha
      * @var string
      * @see https://developers.google.com/recaptcha/docs/language
      */
-    protected $language = null;
+    protected $language;
 
     /**
      * CURL timeout (in seconds) to verify response
@@ -100,12 +106,12 @@ class GoogleRecaptcha extends Captcha
      * @var string
      * @see https://developers.google.com/recaptcha/docs/display#render_param
      */
-    protected $size = null;
+    protected $size;
 
     /**
      * Initialize site and secret keys
      *
-     * @return void
+     * @throws ReflectionException
      */
     public function __construct()
     {
@@ -128,9 +134,9 @@ class GoogleRecaptcha extends Captcha
     /**
      * @inheritdoc
      *
-     * @throws \ReflectionException
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws ReflectionException
+     * @throws Twig_Error_Loader
+     * @throws Exception
      */
     public function getCaptchaSettingsHtml(): string
     {
@@ -161,15 +167,15 @@ class GoogleRecaptcha extends Captcha
         if (!empty($this->siteKey)) {
             $data = 'data-sitekey="'.$this->siteKey.'"';
 
-            if (!is_null($this->theme)) {
+            if ($this->theme !== null) {
                 $data .= ' data-theme="'.$this->theme.'"';
             }
 
-            if (!is_null($this->type)) {
+            if ($this->type !== null) {
                 $data .= ' data-type="'.$this->type.'"';
             }
 
-            if (!is_null($this->size)) {
+            if ($this->size !== null) {
                 $data .= ' data-size="'.$this->size.'"';
             }
 
@@ -182,7 +188,8 @@ class GoogleRecaptcha extends Captcha
     /**
      * @inheritdoc
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     * @throws GuzzleException
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {
@@ -222,7 +229,7 @@ class GoogleRecaptcha extends Captcha
     {
         $this->theme = 'light';
 
-        if (in_array($theme, self::$themes)) {
+        if (in_array($theme, self::$themes, true)) {
             $this->theme = $theme;
         }
     }
@@ -230,14 +237,14 @@ class GoogleRecaptcha extends Captcha
     /**
      * Set type
      *
-     * @param  string $type (see https://developers.google.com/recaptcha/docs/display#config)
+     * @param string $type (see https://developers.google.com/recaptcha/docs/display#config)
      *
      */
     public function setType($type = null)
     {
         $this->type = 'image';
 
-        if (in_array($type, self::$types)) {
+        if (in_array($type, self::$types, true)) {
             $this->type = $type;
         }
     }
@@ -245,7 +252,7 @@ class GoogleRecaptcha extends Captcha
     /**
      * Set language
      *
-     * @param  string $language (see https://developers.google.com/recaptcha/docs/language)
+     * @param string $language (see https://developers.google.com/recaptcha/docs/language)
      *
      */
     public function setLanguage($language)
@@ -256,7 +263,7 @@ class GoogleRecaptcha extends Captcha
     /**
      * Set timeout
      *
-     * @param  int $timeout
+     * @param int $timeout
      *
      */
     public function setVerifyTimeout($timeout)
@@ -267,7 +274,7 @@ class GoogleRecaptcha extends Captcha
     /**
      * Set size
      *
-     * @param  string $size (see https://developers.google.com/recaptcha/docs/display#render_param)
+     * @param string $size (see https://developers.google.com/recaptcha/docs/display#render_param)
      *
      */
     public function setSize($size)
@@ -280,10 +287,10 @@ class GoogleRecaptcha extends Captcha
      *
      * @return string
      */
-    public function getScript()
+    public function getScript(): string
     {
         $data = [];
-        if (!is_null($this->language)) {
+        if ($this->language !== null) {
             $data = ['hl' => $this->language];
         }
 
@@ -295,14 +302,14 @@ class GoogleRecaptcha extends Captcha
      *
      * @param string $gRecaptcha $_POST['g-recaptcha-response']
      *
-     * @return array|mixed|\Psr\Http\Message\ResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array|mixed|ResponseInterface
+     * @throws GuzzleException
      */
     public function getResponse($gRecaptcha)
     {
         $googleResponse = [];
 
-        if (empty($gRecaptcha) || is_null($this->secretKey)) {
+        if (empty($gRecaptcha) || $this->secretKey === null) {
             $response['message'] = "Can't be blank";
             return $response;
         }
@@ -325,7 +332,7 @@ class GoogleRecaptcha extends Captcha
             ]);
 
             $googleResponse = json_decode($response->getBody()->getContents(), true);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Craft::error('sprout-forms-google-recaptcha', $e->getMessage());
         }
 
