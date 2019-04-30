@@ -1,4 +1,9 @@
-# Sprout Google Recaptcha Changelog
+# Changelog
+
+## 1.0.5 - 2019-04-30
+
+### Changed
+- Updated icon
 
 ## 1.0.4 - 2019-04-23
 
