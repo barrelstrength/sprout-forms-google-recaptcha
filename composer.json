@@ -12,8 +12,11 @@
     "sprout google recaptcha"
   ],
   "support": {
-    "docs": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/sprout-forms-google-recaptcha/blob/master/README.md",
-    "issues": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/sprout-forms-google-recaptcha/issues"
+    "email": "sprout@barrelstrengthdesign.com",
+    "issues": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues?state=open",
+    "source": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha",
+    "docs": "https://sprout.barrelstrengthdesign.com/docs/forms",
+    "rss": "https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/commits/v2.atom"
   },
   "license": "MIT",
   "authors": [
@@ -36,9 +39,7 @@
     "handle": "sprout-forms-google-recaptcha",
     "developer": "Barrel Strength",
     "developerUrl": "https://barrelstrengthdesign.com",
-    "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/forms/custom-captchas.html#register-event",
-    "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-forms-google-recaptcha/master/CHANGELOG.md",
-    "downloadUrl": "https://github.com/BarrelStrength/sprout-forms-google-recaptcha/archive/master.zip",
+    "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/forms",
     "class": "barrelstrength\\sproutformsgooglerecaptcha\\SproutFormsGoogleRecaptcha"
   }
 }
