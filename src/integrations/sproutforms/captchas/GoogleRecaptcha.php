@@ -119,6 +119,8 @@ class GoogleRecaptcha extends Captcha
      */
     protected $badge;
 
+    protected $captchaType;
+
     /**
      * Initialize site and secret keys
      *
@@ -133,9 +135,9 @@ class GoogleRecaptcha extends Captcha
 
         // Set the type and badge
         $this->badge = $settings['googleRecaptchaBadge'] ?? null;
-        $type = $settings['googleRecaptchaType'] ?? null;
+        $this->captchaType = $settings['googleRecaptchaType'] ?? null;
 
-        if ($type === static::RECAPTCHA_TYPE_V2_INVISIBLE) {
+        if ($this->captchaType === static::RECAPTCHA_TYPE_V2_INVISIBLE) {
             $this->size = 'invisible';
         }
     }
@@ -174,12 +176,20 @@ class GoogleRecaptcha extends Captcha
 
         Craft::$app->view->registerJsFile($googleRecaptchaFile, ['defer' => 'defer', 'async' => 'async']);
 
-        Craft::$app->view->registerJs("window.onload = function() {
-            var recaptcha = document.querySelector('#g-recaptcha-response');
-            if(recaptcha) {
-                recaptcha.setAttribute('required', '');
-            }
-        };", View::POS_END);
+        if ($this->captchaType === static::RECAPTCHA_TYPE_V2_CHECKBOX) {
+            Craft::$app->view->registerJs("window.onload = function() {
+                var recaptcha = document.querySelector('#g-recaptcha-response');
+                if(recaptcha) {
+                    recaptcha.setAttribute('required', '');
+                }
+            };", View::POS_END);
+        }
+
+        if ($this->captchaType === static::RECAPTCHA_TYPE_V2_INVISIBLE) {
+            Craft::$app->view->registerJs("window.onload = function() {
+                grecaptcha.execute();
+            };", View::POS_END);
+        }
 
         $html = '';
 
