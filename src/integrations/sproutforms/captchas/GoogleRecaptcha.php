@@ -36,6 +36,9 @@ class GoogleRecaptcha extends Captcha
 
     const API_RUL = 'https://www.google.com/recaptcha/api.js';
 
+    const RECAPTCHA_TYPE_V2_CHECKBOX  = 'v2_checkbox';
+    const RECAPTCHA_TYPE_V2_INVISIBLE = 'v2_invisible';
+
     /**
      * @var string
      */
@@ -109,6 +112,14 @@ class GoogleRecaptcha extends Captcha
     protected $size;
 
     /**
+     * Captcha size. Default : bottomright
+     *
+     * @var string
+     * @see https://developers.google.com/recaptcha/docs/invisible#config
+     */
+    protected $badge;
+
+    /**
      * Initialize site and secret keys
      *
      * @throws ReflectionException
@@ -119,6 +130,14 @@ class GoogleRecaptcha extends Captcha
         $this->siteKey = $settings['googleRecaptchaSiteKey'] ?? null;
         $this->secretKey = $settings['googleRecaptchaSecretKey'] ?? null;
         $this->remoteIp = $_SERVER['REMOTE_ADDR'];
+
+        // Set the type and badge
+        $this->badge = $settings['googleRecaptchaBadge'] ?? null;
+        $type = $settings['googleRecaptchaType'] ?? null;
+
+        if ($type === static::RECAPTCHA_TYPE_V2_INVISIBLE) {
+            $this->size = 'invisible';
+        }
     }
 
     public function getName(): string
@@ -177,6 +196,10 @@ class GoogleRecaptcha extends Captcha
 
             if ($this->size !== null) {
                 $data .= ' data-size="'.$this->size.'"';
+            }
+
+            if ($this->badge !== null) {
+                $data .= ' data-badge="'.$this->badge.'"';
             }
 
             $html = '<div class="g-recaptcha" '.$data.'></div>';
@@ -280,6 +303,17 @@ class GoogleRecaptcha extends Captcha
     public function setSize($size)
     {
         $this->size = $size;
+    }
+
+    /**
+     * Set badge
+     *
+     * @param string $badge (see https://developers.google.com/recaptcha/docs/display#render_param)
+     *
+     */
+    public function setBadge($badge)
+    {
+        $this->badge = $badge;
     }
 
     /**
