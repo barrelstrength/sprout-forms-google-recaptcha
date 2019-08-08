@@ -22,3 +22,43 @@
     required: true,
     value: settings['googleRecaptchaSecretKey'] ?? null
 }) }}
+
+{% set googleRecaptchaType = settings.googleRecaptchaType ?? 'v2_checkbox' %}
+
+{{ forms.selectField({
+    label: 'Type'|t('sprout-forms-google-recaptcha'),
+    instructions: 'Select the type of captcha to show. This should mimick the value you choose when creating the captcha.'|t('sprout-forms-google-recaptcha'),
+    id: 'googleRecaptchaType',
+    name: 'captchaSettings['~captchaId~'][googleRecaptchaType]',
+    required: true,
+    toggle: true,
+    targetPrefix: 'badge-settings-',
+    value: googleRecaptchaType,
+    options: [{
+        value: 'v2_checkbox',
+        label: 'reCAPTCHA v2 - "I\'m not a robot" Checkbox',
+    }, {
+        value: 'v2_invisible',
+        label: 'reCAPTCHA v2 - Invisible reCAPTCHA badge',
+    }]
+}) }}
+
+<div id="badge-settings-v2_invisible"{% if googleRecaptchaType != 'v2_invisible' %} class="hidden"{% endif %}>
+    {{ forms.selectField({
+        label: "Badge Type"|t('sprout-forms-google-recaptcha'),
+        instructions: 'Select the type of badge for this invisible captcha.'|t('sprout-forms-google-recaptcha'),
+        id: 'googleRecaptchaBadge',
+        name: 'captchaSettings['~captchaId~'][googleRecaptchaBadge]',
+        value: settings['googleRecaptchaBadge'] ?? 'bottomright',
+        options: [{
+            value: 'bottomright',
+            label: 'Bottom-right',
+        }, {
+            value: 'bottomleft',
+            label: 'Bottom-left',
+        }, {
+            value: 'inline',
+            label: 'Inline',
+        }]
+    }) }}
+</div>
