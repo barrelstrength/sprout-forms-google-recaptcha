@@ -186,8 +186,31 @@ class GoogleRecaptcha extends Captcha
         }
 
         if ($this->captchaType === static::RECAPTCHA_TYPE_V2_INVISIBLE) {
-            Craft::$app->view->registerJs("window.onload = function() {
-                grecaptcha.execute();
+            Craft::$app->view->registerJs("
+            var sproutFormInstance = '';
+
+            window.onload = function() {
+                var recaptcha = document.querySelector('#g-recaptcha-response');
+
+                if (recaptcha) {
+                    // Update our current form reference
+                    sproutFormInstance = recaptcha.form;
+
+                    // Find the form and hijack the submit
+                    recaptcha.form.onsubmit = function(e) {
+                        event.preventDefault();
+
+                        // Fire off the checking to recaptcha
+                        grecaptcha.execute();
+                    }
+                }
+            };
+
+            // Submit callback for invisible captcha, when it was successful
+            var onCaptchaCallback = function(response) {
+                if (sproutFormInstance) {
+                    sproutFormInstance.submit();
+                }
             };", View::POS_END);
         }
 
@@ -210,6 +233,10 @@ class GoogleRecaptcha extends Captcha
 
             if ($this->badge !== null) {
                 $data .= ' data-badge="'.$this->badge.'"';
+            }
+
+            if ($this->captchaType === static::RECAPTCHA_TYPE_V2_INVISIBLE) {
+                $data .= ' data-callback="onCaptchaCallback"';
             }
 
             $html = '<div class="g-recaptcha" '.$data.'></div>';
