@@ -11,7 +11,7 @@
 namespace barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\web\View;
 
@@ -180,11 +180,11 @@ class GoogleRecaptcha extends Captcha
     }
 
     /**
-     * @inheritdoc
-     *
-     * @throws \ReflectionException
+     * @param OnBeforeValidateEntryEvent $event
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
+    public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
         // Only do this on the front-end
         if (Craft::$app->getRequest()->getIsCpRequest()) {
@@ -192,8 +192,9 @@ class GoogleRecaptcha extends Captcha
         }
 
         if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
-            $event->isValid = false;
-            $event->errors[$this->getCaptchaId()] = "Google reCAPTCHA can't be blank";
+            $errorMessage = "Google reCAPTCHA can't be blank";
+            $event->entry->statusId = $this->getSpamStatusId();
+            $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
             return false;
         }
 
@@ -203,11 +204,10 @@ class GoogleRecaptcha extends Captcha
 
         if (isset($googleResponse['error-codes'])) {
             foreach ($googleResponse['error-codes'] as $key => $errorCode) {
-                $event->errors[$this->getCaptchaId()] = $errorCode;
+                $event->entry->statusId = $this->getSpamStatusId();
+                $this->addError(self::CAPTCHA_ERRORS_KEY, $errorCode);
             }
         }
-
-        $event->isValid = $googleResponse['success'];
 
         return $googleResponse['success'] ?? false;
     }
