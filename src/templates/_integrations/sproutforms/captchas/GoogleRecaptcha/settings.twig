@@ -62,3 +62,13 @@
         }]
     }) }}
 </div>
+
+{{ forms.lightswitchField({
+    label: "Include API Code"|t('sprout-base-email'),
+    instructions: "Whether to automatically include the API code. Useful for performance optimisation."|t('sprout-base-email'),
+    id: 'googleRecaptchaIncludeApi',
+    name: 'captchaSettings['~captchaId~'][googleRecaptchaIncludeApi]',
+    on: settings['googleRecaptchaIncludeApi'] ?? true,
+    onLabel: "Enable"|t('sprout-base-email'),
+    offLabel: "Disable"|t('sprout-base-email')
+}) }}
