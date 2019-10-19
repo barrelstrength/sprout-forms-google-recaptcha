@@ -121,6 +121,8 @@ class GoogleRecaptcha extends Captcha
 
     protected $captchaType;
 
+    protected $includeApi = true;
+
     /**
      * Initialize site and secret keys
      *
@@ -173,8 +175,10 @@ class GoogleRecaptcha extends Captcha
     public function getCaptchaHtml(): string
     {
         $googleRecaptchaFile = $this->getScript();
-
-        Craft::$app->view->registerJsFile($googleRecaptchaFile, ['defer' => 'defer', 'async' => 'async']);
+        
+        if ($this->includeApi) {
+            Craft::$app->view->registerJsFile($googleRecaptchaFile, ['defer' => 'defer', 'async' => 'async']);
+        }
 
         if ($this->captchaType === static::RECAPTCHA_TYPE_V2_CHECKBOX) {
             Craft::$app->view->registerJs("window.onload = function() {
