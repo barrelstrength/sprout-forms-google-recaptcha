@@ -199,7 +199,6 @@ class GoogleRecaptcha extends Captcha
 
         if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
             $errorMessage = "Google reCAPTCHA can't be blank";
-            $event->entry->statusId = $this->getSpamStatusId();
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
             return false;
         }
@@ -210,7 +209,6 @@ class GoogleRecaptcha extends Captcha
 
         if (isset($googleResponse['error-codes'])) {
             foreach ($googleResponse['error-codes'] as $key => $errorCode) {
-                $event->entry->statusId = $this->getSpamStatusId();
                 $this->addError(self::CAPTCHA_ERRORS_KEY, $errorCode);
             }
         }
