@@ -1,24 +1,26 @@
 {% import "_includes/forms" as forms %}
 
-{{ forms.textField({
+{{ forms.autosuggestField({
     label: 'Site Key'|t('sprout-forms-google-recaptcha'),
     instructions: 'Manage your Google reCAPTCHA <a href="{url}">API key settings</a>.'|t('sprout-forms-google-recaptcha', {
         url: 'https://www.google.com/recaptcha/admin'
     }),
     id: 'googleRecaptchaSiteKey',
     name: 'captchaSettings['~captchaId~'][googleRecaptchaSiteKey]',
+    suggestEnvVars: true,
     required: true,
     errors: null,
     value: settings['googleRecaptchaSiteKey'] ?? null
 }) }}
 
-{{ forms.textField({
+{{ forms.autosuggestField({
     label: 'Secret key'|t('sprout-forms-google-recaptcha'),
     instructions: 'Manage your Google reCAPTCHA <a href="{url}">API key settings</a>.'|t('sprout-forms-google-recaptcha', {
         url: 'https://www.google.com/recaptcha/admin'
     }),
     id: 'googleRecaptchaSecretKey',
     name: 'captchaSettings['~captchaId~'][googleRecaptchaSecretKey]',
+    suggestEnvVars: true,
     required: true,
     value: settings['googleRecaptchaSecretKey'] ?? null
 }) }}
