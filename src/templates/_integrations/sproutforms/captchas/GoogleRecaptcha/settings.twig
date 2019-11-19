@@ -24,3 +24,11 @@
     required: true,
     value: settings['googleRecaptchaSecretKey'] ?? null
 }) }}
+
+{{ forms.lightswitchField({
+    label: 'Display default required CSS',
+    instructions: 'Make reCAPTCHA Required via CSS',
+    name: 'captchaSettings['~captchaId~'][addRequiredHtml]',
+    on: settings['addRequiredHtml'] ?? true,
+    onLabel: "Enable"|t('sprout-forms-google-recaptcha'),
+}) }}

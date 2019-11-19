@@ -47,6 +47,11 @@ class GoogleRecaptcha extends Captcha
     private $secretKey;
 
     /**
+     * @var bool
+     */
+    private $addRequiredHtml;
+
+    /**
      * Remote IP address
      *
      * @var string
@@ -118,6 +123,7 @@ class GoogleRecaptcha extends Captcha
         $settings = $this->getSettings();
         $this->siteKey = Craft::parseEnv($settings['googleRecaptchaSiteKey']) ?? null;
         $this->secretKey = Craft::parseEnv($settings['googleRecaptchaSecretKey']) ?? null;
+        $this->addRequiredHtml = $settings['addRequiredHtml'] ?? true;
         $this->remoteIp = $_SERVER['REMOTE_ADDR'];
     }
 
@@ -161,6 +167,18 @@ class GoogleRecaptcha extends Captcha
                 recaptcha.setAttribute('required', '');
             }
         };", View::POS_END);
+
+        if ($this->addRequiredHtml){
+            Craft::$app->view->registerCss('#g-recaptcha-response {
+                display: block !important;
+                position: absolute;
+                margin: -78px 0 0 0 !important;
+                width: 302px !important;
+                height: 76px !important;
+                z-index: -999999;
+                opacity: 0;}
+            ');
+        }
 
         $html = '';
 
