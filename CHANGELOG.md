@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.6 - 2019-11-19
+
+### Added
+- Added setting to resources for HTML Required behavior
+- Added support for environment variables in settings ([#9][#9pull])
+
+### Updated
+- Updated barrelstrength/sprout-base-forms requirement to v3.6.1
+
+### Fixed
+- Fixed bug where CP settings were enabled but didn't exist ([#6][#6pull])
+
+[#6pull]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/pull/6
+[#9pull]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/pull/9
+
 ## 1.0.5 - 2019-04-30
 
 ### Changed

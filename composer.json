@@ -2,7 +2,7 @@
   "name": "barrelstrength/sprout-forms-google-recaptcha",
   "description": "Google Recaptcha for Sprout Forms",
   "type": "craft-plugin",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "keywords": [
     "craft",
     "cms",
@@ -27,7 +27,7 @@
   ],
   "require": {
     "craftcms/cms": "^3.0.0",
-    "barrelstrength/sprout-forms": "^3.0.0"
+    "barrelstrength/sprout-forms": "^3.6.1"
   },
   "autoload": {
     "psr-4": {
