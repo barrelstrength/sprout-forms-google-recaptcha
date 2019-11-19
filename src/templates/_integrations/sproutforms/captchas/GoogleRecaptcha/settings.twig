@@ -26,8 +26,8 @@
 }) }}
 
 {{ forms.lightswitchField({
-    label: 'Display default required CSS',
-    instructions: 'Make reCAPTCHA Required via CSS',
+    label: 'Output CSS',
+    instructions: 'The CSS will help display an HTML5 Required messsage if a user does not fill in the reCAPTCHA field. Disable this setting if you wish to manage the CSS manually.',
     name: 'captchaSettings['~captchaId~'][addRequiredHtml]',
     on: settings['addRequiredHtml'] ?? true,
     onLabel: "Enable"|t('sprout-forms-google-recaptcha'),
