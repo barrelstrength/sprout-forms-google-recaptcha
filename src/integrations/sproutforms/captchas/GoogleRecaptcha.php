@@ -116,8 +116,8 @@ class GoogleRecaptcha extends Captcha
     public function __construct()
     {
         $settings = $this->getSettings();
-        $this->siteKey = $settings['googleRecaptchaSiteKey'] ?? null;
-        $this->secretKey = $settings['googleRecaptchaSecretKey'] ?? null;
+        $this->siteKey = Craft::parseEnv($settings['googleRecaptchaSiteKey']) ?? null;
+        $this->secretKey = Craft::parseEnv($settings['googleRecaptchaSecretKey']) ?? null;
         $this->remoteIp = $_SERVER['REMOTE_ADDR'];
     }
 
