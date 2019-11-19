@@ -34,7 +34,7 @@ class GoogleRecaptcha extends Captcha
      */
     const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
-    const API_RUL = 'https://www.google.com/recaptcha/api.js';
+    const API_URL = 'https://www.google.com/recaptcha/api.js';
 
     /**
      * @var string
@@ -309,7 +309,7 @@ class GoogleRecaptcha extends Captcha
             $data = ['hl' => $this->language];
         }
 
-        return self::API_RUL.'?'.http_build_query($data);
+        return self::API_URL.'?'.http_build_query($data);
     }
 
     /**
