@@ -26,11 +26,6 @@ use yii\base\Event;
 class SproutFormsGoogleRecaptcha extends Plugin
 {
     /**
-     * @var bool
-     */
-    public $hasCpSettings = true;
-
-    /**
      * @inheritdoc
      */
     public function init()
