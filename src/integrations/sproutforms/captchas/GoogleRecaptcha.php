@@ -188,7 +188,7 @@ class GoogleRecaptcha extends Captcha
     /**
      * @param OnBeforeValidateEntryEvent $event
      * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
