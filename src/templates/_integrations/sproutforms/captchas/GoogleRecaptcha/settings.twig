@@ -1,34 +1,109 @@
 {% import "_includes/forms" as forms %}
 
-{{ forms.autosuggestField({
-    label: 'Site Key'|t('sprout-forms-google-recaptcha'),
-    instructions: 'Manage your Google reCAPTCHA <a href="{url}">API key settings</a>.'|t('sprout-forms-google-recaptcha', {
+{% set recaptchaType = settings.recaptchaType ?? 'v2_checkbox' %}
+
+{{ forms.selectField({
+    label: 'Type'|t('sprout-forms-google-recaptcha'),
+    instructions: 'Select the type of reCAPTCHA to use. Manage your <a href="{url}">Google reCAPTCHA and API key settings</a>.'|t('sprout-forms-google-recaptcha', {
         url: 'https://www.google.com/recaptcha/admin'
     }),
-    id: 'googleRecaptchaSiteKey',
-    name: 'captchaSettings['~captchaId~'][googleRecaptchaSiteKey]',
+    id: 'recaptchaType',
+    name: 'captchaSettings['~captchaId~'][recaptchaType]',
+    required: true,
+    toggle: true,
+    targetPrefix: 'badge-settings-',
+    value: recaptchaType,
+    options: [{
+        value: "v2_checkbox",
+        label: "reCAPTCHA v2 - “I’m not a robot” Checkbox",
+    },{
+        value: "v2_invisible",
+        label: "reCAPTCHA v2 - Invisible reCAPTCHA badge",
+    }]
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Site Key'|t('sprout-forms-google-recaptcha'),
+    id: 'siteKey',
+    name: 'captchaSettings['~captchaId~'][siteKey]',
     suggestEnvVars: true,
     required: true,
     errors: null,
-    value: settings['googleRecaptchaSiteKey'] ?? null
+    value: settings['siteKey'] ?? null
 }) }}
 
 {{ forms.autosuggestField({
     label: 'Secret key'|t('sprout-forms-google-recaptcha'),
-    instructions: 'Manage your Google reCAPTCHA <a href="{url}">API key settings</a>.'|t('sprout-forms-google-recaptcha', {
-        url: 'https://www.google.com/recaptcha/admin'
-    }),
-    id: 'googleRecaptchaSecretKey',
-    name: 'captchaSettings['~captchaId~'][googleRecaptchaSecretKey]',
+    id: 'secretKey',
+    name: 'captchaSettings['~captchaId~'][secretKey]',
     suggestEnvVars: true,
     required: true,
-    value: settings['googleRecaptchaSecretKey'] ?? null
+    value: settings['secretKey'] ?? null
 }) }}
 
+{{ forms.selectField({
+    label: "Language"|t('sprout-forms-google-recaptcha'),
+    id: 'language',
+    name: 'captchaSettings['~captchaId~'][language]',
+    value: settings['language'] ?? 'en',
+    options: languageOptions
+}) }}
+
+<div id="badge-settings-v2_checkbox"{% if recaptchaType != 'v2_checkbox' %} class="hidden"{% endif %}>
+    {{ forms.selectField({
+        label: "Size"|t('sprout-forms-google-recaptcha'),
+        name: 'captchaSettings['~captchaId~'][size]',
+        value: settings['size'] ?? 'normal',
+        options: [{
+            value: 'normal',
+            label: 'Normal',
+        }, {
+            value: 'compact',
+            label: 'Compact',
+        }]
+    }) }}
+
+    {{ forms.selectField({
+        label: "Theme"|t('sprout-forms-google-recaptcha'),
+        name: 'captchaSettings['~captchaId~'][theme]',
+        value: settings['theme'] ?? 'light',
+        options: [{
+            value: 'light',
+            label: 'Light',
+        }, {
+            value: 'dark',
+            label: 'Dark',
+        }]
+    }) }}
+</div>
+
+<div id="badge-settings-v2_invisible"{% if recaptchaType != 'v2_invisible' %} class="hidden"{% endif %}>
+    {{ forms.selectField({
+        label: "Badge Type"|t('sprout-forms-google-recaptcha'),
+        instructions: 'Select the type of badge to display. Select an "Inline" option to position the badge with CSS.'|t('sprout-forms-google-recaptcha'),
+        id: 'badge',
+        name: 'captchaSettings['~captchaId~'][badge]',
+        value: settings['badge'] ?? 'bottomright',
+        options: [{
+            value: 'bottomright',
+            label: 'Bottom-right',
+        }, {
+            value: 'bottomleft',
+            label: 'Bottom-left',
+        }, {
+            value: 'inline-badge',
+            label: 'Inline - Badge',
+        }, {
+            value: 'inline-text',
+            label: 'Inline - Text',
+        }]
+    }) }}
+</div>
+
 {{ forms.lightswitchField({
-    label: 'Output CSS',
-    instructions: 'The CSS will help display an HTML5 Required messsage if a user does not fill in the reCAPTCHA field. Disable this setting if you wish to manage the CSS manually.',
-    name: 'captchaSettings['~captchaId~'][addRequiredHtml]',
-    on: settings['addRequiredHtml'] ?? true,
+    label: 'Disable CSS',
+    instructions: 'Enable this setting if you wish to manage CSS manually.',
+    name: 'captchaSettings['~captchaId~'][disableCss]',
+    on: settings['disableCss'] ?? false,
     onLabel: "Enable"|t('sprout-forms-google-recaptcha'),
 }) }}

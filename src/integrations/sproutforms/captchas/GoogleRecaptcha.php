@@ -11,6 +11,7 @@
 namespace barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\web\View;
@@ -18,24 +19,20 @@ use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Twig_Error_Loader;
 use yii\base\Exception;
 
 /**
  * Google reCAPTCHA v2 class
  *
+ * @property array  $languageOptions
+ * @property string $script
  */
 class GoogleRecaptcha extends Captcha
 {
-    /**
-     * URL to use to verify reCAPTCHA
-     *
-     * @var string
-     */
-    const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
-
-    const API_URL = 'https://www.google.com/recaptcha/api.js';
-
     /**
      * @var string
      */
@@ -49,7 +46,7 @@ class GoogleRecaptcha extends Captcha
     /**
      * @var bool
      */
-    private $addRequiredHtml;
+    private $disableCss;
 
     /**
      * Remote IP address
@@ -72,23 +69,7 @@ class GoogleRecaptcha extends Captcha
      * @var string
      * @see https://developers.google.com/recaptcha/docs/display#config
      */
-    protected $theme;
-
-    /**
-     * Supported types
-     *
-     * @var array
-     * @see https://developers.google.com/recaptcha/docs/display#config
-     */
-    protected static $types = ['image', 'audio'];
-
-    /**
-     * Captcha type. Default : image
-     *
-     * @var string
-     * @see https://developers.google.com/recaptcha/docs/display#config
-     */
-    protected $type;
+    protected $theme = 'light';
 
     /**
      * Captcha language. Default : auto-detect
@@ -96,14 +77,7 @@ class GoogleRecaptcha extends Captcha
      * @var string
      * @see https://developers.google.com/recaptcha/docs/language
      */
-    protected $language;
-
-    /**
-     * CURL timeout (in seconds) to verify response
-     *
-     * @var int
-     */
-    private $verifyTimeout = 1;
+    protected $language = 'en';
 
     /**
      * Captcha size. Default : normal
@@ -111,102 +85,99 @@ class GoogleRecaptcha extends Captcha
      * @var string
      * @see https://developers.google.com/recaptcha/docs/display#render_param
      */
-    protected $size;
+    protected $size = 'normal';
 
     /**
      * Initialize site and secret keys
      *
      * @throws ReflectionException
      */
-    public function __construct()
+    public function init()
     {
         $settings = $this->getSettings();
-        $this->siteKey = Craft::parseEnv($settings['googleRecaptchaSiteKey']) ?? null;
-        $this->secretKey = Craft::parseEnv($settings['googleRecaptchaSecretKey']) ?? null;
-        $this->addRequiredHtml = $settings['addRequiredHtml'] ?? true;
+        $this->siteKey = Craft::parseEnv($settings['siteKey']) ?? null;
+        $this->secretKey = Craft::parseEnv($settings['secretKey']) ?? null;
+        $this->disableCss = $settings['disableCss'] ?? false;
         $this->remoteIp = $_SERVER['REMOTE_ADDR'];
+
+        parent::init();
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return 'Google reCAPTCHA';
     }
 
+    /**
+     * @return string
+     */
     public function getDescription(): string
     {
         return Craft::t('sprout-forms-google-recaptcha', 'reCAPTCHA protects you against spam and other types of automated abuse.');
     }
 
     /**
-     * @inheritdoc
-     *
+     * @return string
      * @throws ReflectionException
-     * @throws Twig_Error_Loader
-     * @throws Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getCaptchaSettingsHtml(): string
     {
         $settings = $this->getSettings();
 
-        $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/settings', [
+        $languageOptions = $this->getLanguageOptions();
+
+        return Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/settings', [
             'settings' => $settings,
+            'languageOptions' => $languageOptions,
             'captchaId' => $this->getCaptchaId()
         ]);
-        return $html;
     }
 
-    public function getCaptchaHtml(): string
+    /**
+     * @param Form $form
+     *
+     * @return string
+     * @throws Exception
+     * @throws LoaderError
+     * @throws ReflectionException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getCaptchaHtml(Form $form): string
     {
-        $googleRecaptchaFile = $this->getScript();
+        $oldTemplateMode = Craft::$app->getView()->getTemplateMode();
+        Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_CP);
 
-        Craft::$app->view->registerJsFile($googleRecaptchaFile, ['defer' => 'defer', 'async' => 'async']);
+        $settings = $this->getSettings();
 
-        Craft::$app->view->registerJs("window.onload = function() {
-            var recaptcha = document.querySelector('#g-recaptcha-response');
-            if(recaptcha) {
-                recaptcha.setAttribute('required', '');
-            }
-        };", View::POS_END);
+        $googleTermsText = Craft::t('site', "This site is protected by reCAPTCHA and the Google <a href='{privacyUrl}'>Privacy Policy</a> and <a href='{termsUrl}'>Terms of Service</a> apply.", [
+            'privacyUrl' => 'https://policies.google.com/privacy',
+            'termsUrl' => 'https://policies.google.com/terms'
+        ]);
 
-        if ($this->addRequiredHtml){
-            Craft::$app->view->registerCss('#g-recaptcha-response {
-                display: block !important;
-                position: absolute;
-                margin: -78px 0 0 0 !important;
-                width: 302px !important;
-                height: 76px !important;
-                z-index: -999999;
-                opacity: 0;}
-            ');
-        }
+        $googleTermsText = '<p>'.$googleTermsText.'</p>';
 
-        $html = '';
+        $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/'.$settings['recaptchaType'], [
+            'form' => $form,
+            'settings' => $settings,
+            'googleTermsText' => $googleTermsText
+        ]);
 
-        if (!empty($this->siteKey)) {
-            $data = 'data-sitekey="'.$this->siteKey.'"';
-
-            if ($this->theme !== null) {
-                $data .= ' data-theme="'.$this->theme.'"';
-            }
-
-            if ($this->type !== null) {
-                $data .= ' data-type="'.$this->type.'"';
-            }
-
-            if ($this->size !== null) {
-                $data .= ' data-size="'.$this->size.'"';
-            }
-
-            $html = '<div class="g-recaptcha" '.$data.'></div>';
-        }
+        Craft::$app->getView()->setTemplateMode($oldTemplateMode);
 
         return $html;
     }
 
     /**
      * @param OnBeforeValidateEntryEvent $event
+     *
      * @return bool
-     * @throws GuzzleException
      */
     public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
@@ -215,119 +186,41 @@ class GoogleRecaptcha extends Captcha
             return true;
         }
 
-        if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
-            $errorMessage = "Google reCAPTCHA can't be blank";
+        $gRecaptchaResponse = $_POST['g-recaptcha-response'] ?? null;
+
+        if (empty($gRecaptchaResponse)) {
+            $errorMessage = Craft::t('sprout-forms-google-recaptcha', "Google reCAPTCHA can't be blank.");
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
             return false;
         }
 
-        $gRecaptcha = $_POST['g-recaptcha-response'] ?? null;
+        if ($this->secretKey === null) {
+            $errorMessage = Craft::t('sprout-forms-google-recaptcha', 'Invalid secret key.');
+            $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
+            return false;
+        }
 
-        $googleResponse = $this->getResponse($gRecaptcha);
+        $siteVerifyResponse = $this->getResponse($gRecaptchaResponse);
 
-        if (isset($googleResponse['error-codes'])) {
-            foreach ($googleResponse['error-codes'] as $key => $errorCode) {
+        if (isset($siteVerifyResponse['error-codes'])) {
+            foreach ($siteVerifyResponse['error-codes'] as $key => $errorCode) {
                 $this->addError(self::CAPTCHA_ERRORS_KEY, $errorCode);
             }
         }
 
-        return $googleResponse['success'] ?? false;
+        return $siteVerifyResponse['success'] ?? false;
     }
 
     /**
-     * Set theme
+     * Server side reCAPTCHA validation
      *
-     * @param string $theme (see https://developers.google.com/recaptcha/docs/display#config)
+     * @param $gRecaptcha
      *
-     */
-    public function setTheme($theme = null)
-    {
-        $this->theme = 'light';
-
-        if (in_array($theme, self::$themes, true)) {
-            $this->theme = $theme;
-        }
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type (see https://developers.google.com/recaptcha/docs/display#config)
-     *
-     */
-    public function setType($type = null)
-    {
-        $this->type = 'image';
-
-        if (in_array($type, self::$types, true)) {
-            $this->type = $type;
-        }
-    }
-
-    /**
-     * Set language
-     *
-     * @param string $language (see https://developers.google.com/recaptcha/docs/language)
-     *
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-    }
-
-    /**
-     * Set timeout
-     *
-     * @param int $timeout
-     *
-     */
-    public function setVerifyTimeout($timeout)
-    {
-        $this->verifyTimeout = $timeout;
-    }
-
-    /**
-     * Set size
-     *
-     * @param string $size (see https://developers.google.com/recaptcha/docs/display#render_param)
-     *
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-    }
-
-    /**
-     * Generate the JS code of the captcha
-     *
-     * @return string
-     */
-    public function getScript(): string
-    {
-        $data = [];
-        if ($this->language !== null) {
-            $data = ['hl' => $this->language];
-        }
-
-        return self::API_URL.'?'.http_build_query($data);
-    }
-
-    /**
-     * Checks the code given by the captcha
-     *
-     * @param string $gRecaptcha $_POST['g-recaptcha-response']
-     *
-     * @return array|mixed|ResponseInterface
-     * @throws GuzzleException
+     * @return array|mixed
      */
     public function getResponse($gRecaptcha)
     {
-        $googleResponse = [];
-
-        if (empty($gRecaptcha) || $this->secretKey === null) {
-            $response['message'] = "Can't be blank";
-            return $response;
-        }
+        $responseObject = [];
 
         $params = [
             'secret' => $this->secretKey,
@@ -337,7 +230,7 @@ class GoogleRecaptcha extends Captcha
 
         try {
             $client = Craft::createGuzzleClient([
-                'base_uri' => self::VERIFY_URL,
+                'base_uri' => 'https://www.google.com/recaptcha/api/siteverify',
                 'timeout' => 120,
                 'connect_timeout' => 120
             ]);
@@ -346,11 +239,107 @@ class GoogleRecaptcha extends Captcha
                 'query' => $params
             ]);
 
-            $googleResponse = json_decode($response->getBody()->getContents(), true);
+            $responseObject = json_decode($response->getBody()->getContents(), true);
+
         } catch (Throwable $e) {
+            // Mock a response object with the error message
+            $responseObject['success'] = false;
+            $responseObject['error-codes'] = $e->getMessage();
             Craft::error('sprout-forms-google-recaptcha', $e->getMessage());
         }
 
-        return $googleResponse;
+        return $responseObject;
+    }
+
+    /**
+     * List of language options for reCAPTCHA badge
+     *
+     * Manually update list
+     * https://developers.google.com/recaptcha/docs/language
+     */
+    public function getLanguageOptions(): array
+    {
+        $languages = [
+            'Arabic' => 'ar',
+            'Afrikaans' => 'af',
+            'Amharic' => 'am',
+            'Armenian' => 'hy',
+            'Azerbaijani' => 'az',
+            'Basque' => 'eu',
+            'Bengali' => 'bn',
+            'Bulgarian' => 'bg',
+            'Catalan' => 'ca',
+            'Chinese (Hong Kong)' => 'zh-HK',
+            'Chinese (Simplified)' => 'zh-CN',
+            'Chinese (Traditional)' => 'zh-TW',
+            'Croatian' => 'hr',
+            'Czech' => 'cs',
+            'Danish' => 'da',
+            'Dutch' => 'nl',
+            'English (UK)' => 'en-GB',
+            'English (US)' => 'en',
+            'Estonian' => 'et',
+            'Filipino' => 'fil',
+            'Finnish' => 'fi',
+            'French' => 'fr',
+            'French (Canadian)' => 'fr-CA',
+            'Galician' => 'gl',
+            'Georgian' => 'ka',
+            'German' => 'de',
+            'German (Austria)' => 'de-AT',
+            'German (Switzerland)' => 'de-CH',
+            'Greek' => 'el',
+            'Gujarati' => 'gu',
+            'Hebrew' => 'iw',
+            'Hindi' => 'hi',
+            'Hungarian' => 'hu',
+            'Icelandic' => 'is',
+            'Indonesian' => 'id',
+            'Italian' => 'it',
+            'Japanese' => 'ja',
+            'Kannada' => 'kn',
+            'Korean' => 'ko',
+            'Laothian' => 'lo',
+            'Latvian' => 'lv',
+            'Lithuanian' => 'lt',
+            'Malay' => 'ms',
+            'Malayalam' => 'ml',
+            'Marathi' => 'mr',
+            'Mongolian' => 'mn',
+            'Norwegian' => 'no',
+            'Persian' => 'fa',
+            'Polish' => 'pl',
+            'Portuguese' => 'pt',
+            'Portuguese (Brazil)' => 'pt-BR',
+            'Portuguese (Portugal)' => 'pt-PT',
+            'Romanian' => 'ro',
+            'Russian' => 'ru',
+            'Serbian' => 'sr',
+            'Sinhalese' => 'si',
+            'Slovak' => 'sk',
+            'Slovenian' => 'sl',
+            'Spanish' => 'es',
+            'Spanish (Latin America)' => 'es-419',
+            'Swahili' => 'sw',
+            'Swedish' => 'sv',
+            'Tamil' => 'ta',
+            'Telugu' => 'te',
+            'Thai' => 'th',
+            'Turkish' => 'tr',
+            'Ukrainian' => 'uk',
+            'Urdu' => 'ur',
+            'Vietnamese' => 'vi',
+            'Zulu' => 'zu'
+        ];
+
+        $languageOptions = [];
+        foreach ($languages as $languageName => $languageCode) {
+            $languageOptions[] = [
+                'label' => $languageName,
+                'value' => $languageCode
+            ];
+        }
+
+        return $languageOptions;
     }
 }

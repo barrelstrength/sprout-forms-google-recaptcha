@@ -28,7 +28,7 @@ class m191119_000000_set_default_recaptcha_css extends Migration
         $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
         $recaptchaSettings = $currentSettings['captchaSettings']['sproutformsgooglerecaptcha-googlerecaptcha'] ?? [];
 
-        $recaptchaSettings['addRequiredHtml'] = 0;
+        $recaptchaSettings['disableCss'] = 0;
         $currentSettings['captchaSettings']['sproutformsgooglerecaptcha-googlerecaptcha'] = $recaptchaSettings;
 
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $currentSettings);

@@ -1,0 +1,66 @@
+{#{%- set formId = form.handle ~ '-form' -%}#}
+{#{%- set formSubmitButtonId = form.handle ~ '-submit-form' -%}#}
+{#{%- set formSubmitButtonContainerId = form.handle ~ '-form .submit' -%}#}
+{%- set reCaptchaContainerId = form.handle ~ '-form-google-recaptcha' -%}
+
+{# UNIQUE ELEMENT for each form #}
+<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container google-recaptcha-badge-{{ settings.badge }}"></div>
+
+{# Normalize 'inline' badge setting #}
+{% if settings.badge in ['inline-badge', 'inline-text'] %}
+    {% set badgePosition = 'inline' %}
+{% else %}
+    {% set badgePosition = settings.badge %}
+{% endif %}
+
+{%- set recaptchaJs = view.getAssetManager().getPublishedUrl(
+    '@sproutformsgooglerecaptcha/web/assets/recaptcha/dist/js/recaptcha.js',
+    true) -%}
+{%- do view.registerJsFile(recaptchaJs, {
+    async: true,
+    defer: true
+}) -%}
+
+{% js %}
+
+    if (typeof sproutFormsRecaptchaOnloadCallback === 'undefined') {
+    var sproutFormsRecaptchaOnloadCallback = function() {
+    new SproutFormsGoogleRecaptcha({
+    siteKey: '{{ settings.siteKey }}',
+    badgePosition: '{{ badgePosition }}',
+    grecaptcha: grecaptcha
+    });
+    };
+    };
+
+{% endjs %}
+
+{# reCAPTCHA logic. Must come after `onloadCallback` js above. #}
+{%- do view.registerJsFile('https://www.google.com/recaptcha/api.js?onload=sproutFormsRecaptchaOnloadCallback&render=explicit&hl=' ~ settings.language, {
+    async: true,
+    defer: true
+}) -%}
+
+{% if not settings.disableCss %}
+    {% css %}
+        {# Displays the HTML5 invalid message hint #}
+        #g-recaptcha-response {
+        display: block !important;
+        position: absolute;
+        margin: -78px 0 0 0 !important;
+        width: 302px !important;
+        height: 76px !important;
+        z-index: -999999;
+        opacity: 0;
+        }
+
+        {# Hides reCAPTCHA badge, display terms via text instead. See js above. #}
+        {% if settings.badge == 'inline-text' %}
+            .grecaptcha-badge {
+            visibility: hidden;
+            height:0 !important;
+            width:0 !important;
+            }
+        {% endif %}
+    {% endcss %}
+{% endif %}

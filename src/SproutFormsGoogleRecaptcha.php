@@ -15,6 +15,7 @@ use barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas\
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use yii\base\Event;
+use Craft;
 
 /**
  * Class SproutFormsGoogleRecaptcha
@@ -36,6 +37,8 @@ class SproutFormsGoogleRecaptcha extends Plugin
     public function init()
     {
         parent::init();
+
+        Craft::setAlias('@sproutformsgooglerecaptcha', $this->basePath);
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = GoogleRecaptcha::class;

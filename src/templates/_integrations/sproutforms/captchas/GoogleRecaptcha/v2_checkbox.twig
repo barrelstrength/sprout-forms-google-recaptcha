@@ -1,0 +1,47 @@
+{%- set reCaptchaContainerId = form.handle ~ '-form-google-recaptcha' -%}
+
+{# UNIQUE ELEMENT for each form #}
+<div id="{{ reCaptchaContainerId }}"></div>
+
+{# For multiple forms, need to dynamically build this... as we only call onLoadCallback once #}
+{% js %}
+    var sproutFormsRecaptchaOnloadCallback = function() {
+
+    {# Render reCAPTCHA #}
+    grecaptcha.render('{{ reCaptchaContainerId }}', {
+    'sitekey': '{{ settings.siteKey }}',
+    'theme': '{{ settings.theme }}',
+    'size': '{{ settings.size }}',
+    });
+
+    };
+
+    window.onload = function() {
+    var recaptcha = document.querySelector('#g-recaptcha-response');
+    if(recaptcha) {
+    recaptcha.required = true;
+    recaptcha.setCustomValidity("{{ 'Please fill out this field.'|t('sprout-forms-google-recaptcha') }}");
+    }
+    };
+{% endjs %}
+
+{# reCAPTCHA logic. Must come after `onloadCallback` js above. #}
+{%- do view.registerJsFile('https://www.google.com/recaptcha/api.js?onload=sproutFormsRecaptchaOnloadCallback&render=explicit&hl=' ~ settings.language, {
+    async: true,
+    defer: true
+}) -%}
+
+{% if not settings.disableCss %}
+    {% css %}
+        {# Displays the HTML5 invalid message hint #}
+        #g-recaptcha-response {
+        display: block !important;
+        position: absolute;
+        margin: -78px 0 0 0 !important;
+        width: 302px !important;
+        height: 76px !important;
+        z-index: -999999;
+        opacity: 0;
+        }
+    {% endcss %}
+{% endif %}
