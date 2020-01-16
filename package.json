@@ -1,0 +1,12 @@
+{
+  "author": "Barrel Strength Design",
+  "license": "proprietary",
+  "scripts": {
+    "watch": "npm run build -- --watch",
+    "build": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "laravel-mix": "^5.0.1"
+  }
+}
