@@ -140,8 +140,6 @@ class GoogleRecaptcha extends Captcha
     }
 
     /**
-     * @param Form $form
-     *
      * @return string
      * @throws Exception
      * @throws LoaderError
@@ -149,7 +147,7 @@ class GoogleRecaptcha extends Captcha
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getCaptchaHtml(Form $form): string
+    public function getCaptchaHtml(): string
     {
         $oldTemplateMode = Craft::$app->getView()->getTemplateMode();
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_CP);
@@ -157,7 +155,7 @@ class GoogleRecaptcha extends Captcha
         $settings = $this->getSettings();
 
         $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/'.$settings['recaptchaType'], [
-            'form' => $form,
+            'form' => $this->form,
             'settings' => $settings
         ]);
 
