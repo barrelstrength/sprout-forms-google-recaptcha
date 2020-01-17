@@ -60,7 +60,7 @@ class SproutFormsGoogleRecaptchaCheckbox {
   }
 
   /**
-   * Submit form on successful callback
+   * Make reCAPTCHA not required any longer if successful callback
    *
    * @param token
    * @param form
@@ -68,10 +68,7 @@ class SproutFormsGoogleRecaptchaCheckbox {
   onSproutFormsRecaptchaSuccess(token, form) {
     let recaptchaResponseTextarea = form.querySelector('.g-recaptcha-response');
     recaptchaResponseTextarea.required = false;
-
-    if (form) {
-      form.submit();
-    }
+    recaptchaResponseTextarea.setCustomValidity('');
   }
 
   /**

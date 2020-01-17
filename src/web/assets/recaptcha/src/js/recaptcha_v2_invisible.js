@@ -41,10 +41,11 @@ class SproutFormsGoogleRecaptchaInvisible {
       // Place the reCAPTCHA terms after the submit button
       if (this.badge === 'inline-text') {
         submitButtonContainer.appendChild(recaptchaInlineTextTerms);
+        recaptchaInlineTextTerms.style.display = 'block';
       } else {
         submitButtonContainer.appendChild(recaptchaContainer);
+        recaptchaContainer.style.display = 'block';
       }
-
     }
   }
 

@@ -1,9 +1,9 @@
 {%- set reCaptchaContainerId = form.handle ~ '-form-google-recaptcha' -%}
 
-<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container google-recaptcha-badge-{{ settings.badge }}" data-google-recaptcha-form-id="{{ form.handle }}-form"></div>
+<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container google-recaptcha-badge-{{ settings.badge }}" data-google-recaptcha-form-id="{{ form.handle }}-form" style="display:none;"></div>
 
 {% if settings.badge == 'inline-text' %}
-    <p class="google-recaptcha-inline-text-terms">{{ "This site is protected by reCAPTCHA and the Google <a href='{privacyUrl}'>Privacy Policy</a> and <a href='{termsUrl}'>Terms of Service</a> apply."|t('sprout-forms-google-recaptcha', {
+    <p class="google-recaptcha-inline-text-terms" style="display:none;">{{ "This site is protected by reCAPTCHA and the Google <a href='{privacyUrl}'>Privacy Policy</a> and <a href='{termsUrl}'>Terms of Service</a> apply."|t('sprout-forms-google-recaptcha', {
             privacyUrl: 'https://policies.google.com/privacy',
             termsUrl: 'https://policies.google.com/terms'
         })|raw }}</p>
