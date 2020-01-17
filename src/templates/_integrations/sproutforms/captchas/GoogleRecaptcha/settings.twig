@@ -49,6 +49,19 @@
     options: languageOptions
 }) }}
 
+{{ forms.selectField({
+    label: "Theme"|t('sprout-forms-google-recaptcha'),
+    name: 'captchaSettings['~captchaId~'][theme]',
+    value: settings['theme'] ?? 'light',
+    options: [{
+        value: 'light',
+        label: 'Light',
+    }, {
+        value: 'dark',
+        label: 'Dark',
+    }]
+}) }}
+
 <div id="badge-settings-v2_checkbox"{% if recaptchaType != 'v2_checkbox' %} class="hidden"{% endif %}>
     {{ forms.selectField({
         label: "Size"|t('sprout-forms-google-recaptcha'),
@@ -60,19 +73,6 @@
         }, {
             value: 'compact',
             label: 'Compact',
-        }]
-    }) }}
-
-    {{ forms.selectField({
-        label: "Theme"|t('sprout-forms-google-recaptcha'),
-        name: 'captchaSettings['~captchaId~'][theme]',
-        value: settings['theme'] ?? 'light',
-        options: [{
-            value: 'light',
-            label: 'Light',
-        }, {
-            value: 'dark',
-            label: 'Dark',
         }]
     }) }}
 </div>

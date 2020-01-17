@@ -1,27 +1,28 @@
 {%- set reCaptchaContainerId = form.handle ~ '-form-google-recaptcha' -%}
 
-{# UNIQUE ELEMENT for each form #}
-<div id="{{ reCaptchaContainerId }}"></div>
+<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container" data-google-recaptcha-form-id="{{ form.handle }}-form"></div>
 
-{# For multiple forms, need to dynamically build this... as we only call onLoadCallback once #}
+{%- set recaptchaJs = view.getAssetManager().getPublishedUrl(
+    '@sproutformsgooglerecaptcha/web/assets/recaptcha/dist/js/recaptcha_v2_checkbox.js',
+    true) -%}
+{%- do view.registerJsFile(recaptchaJs, {
+    async: true,
+    defer: true
+}) -%}
+
+{# Our class instantiates all reCAPTCHAs on the page because we only want to load the
+   Google reCAPTCHA API resource file once and it only has a single callback. #}
 {% js %}
+    if (typeof sproutFormsRecaptchaOnloadCallback === 'undefined') {
     var sproutFormsRecaptchaOnloadCallback = function() {
-
-    {# Render reCAPTCHA #}
-    grecaptcha.render('{{ reCaptchaContainerId }}', {
-    'sitekey': '{{ settings.siteKey }}',
-    'theme': '{{ settings.theme }}',
-    'size': '{{ settings.size }}',
+    new SproutFormsGoogleRecaptchaCheckbox({
+    siteKey: '{{ settings.siteKey }}',
+    theme: '{{ settings.theme }}',
+    size: '{{ settings.size }}',
+    customValidityText: "{{ 'Please fill out this field.'|t('sprout-forms-google-recaptcha') }}",
+    grecaptcha: grecaptcha
     });
-
     };
-
-    window.onload = function() {
-    var recaptcha = document.querySelector('#g-recaptcha-response');
-    if(recaptcha) {
-    recaptcha.required = true;
-    recaptcha.setCustomValidity("{{ 'Please fill out this field.'|t('sprout-forms-google-recaptcha') }}");
-    }
     };
 {% endjs %}
 

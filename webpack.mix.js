@@ -2,8 +2,11 @@ const mix = require('laravel-mix');
 
 mix
   .js([
-    'src/web/assets/recaptcha/src/js/recaptcha.js',
-  ], 'src/web/assets/recaptcha/dist/js/recaptcha.js');
+    'src/web/assets/recaptcha/src/js/recaptcha_v2_checkbox.js',
+  ], 'src/web/assets/recaptcha/dist/js/recaptcha_v2_checkbox.js')
+  .js([
+    'src/web/assets/recaptcha/src/js/recaptcha_v2_invisible.js',
+  ], 'src/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js');
 
 // Full API
 // mix.js(src, output);

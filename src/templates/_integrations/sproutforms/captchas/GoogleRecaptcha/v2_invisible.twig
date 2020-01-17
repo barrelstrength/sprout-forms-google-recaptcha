@@ -1,38 +1,36 @@
-{#{%- set formId = form.handle ~ '-form' -%}#}
-{#{%- set formSubmitButtonId = form.handle ~ '-submit-form' -%}#}
-{#{%- set formSubmitButtonContainerId = form.handle ~ '-form .submit' -%}#}
 {%- set reCaptchaContainerId = form.handle ~ '-form-google-recaptcha' -%}
 
-{# UNIQUE ELEMENT for each form #}
-<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container google-recaptcha-badge-{{ settings.badge }}"></div>
+<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container google-recaptcha-badge-{{ settings.badge }}" data-google-recaptcha-form-id="{{ form.handle }}-form"></div>
 
-{# Normalize 'inline' badge setting #}
-{% if settings.badge in ['inline-badge', 'inline-text'] %}
-    {% set badgePosition = 'inline' %}
-{% else %}
-    {% set badgePosition = settings.badge %}
+{% if settings.badge == 'inline-text' %}
+    <p class="google-recaptcha-inline-text-terms">{{ "This site is protected by reCAPTCHA and the Google <a href='{privacyUrl}'>Privacy Policy</a> and <a href='{termsUrl}'>Terms of Service</a> apply."|t('sprout-forms-google-recaptcha', {
+            privacyUrl: 'https://policies.google.com/privacy',
+            termsUrl: 'https://policies.google.com/terms'
+        })|raw }}</p>
 {% endif %}
 
 {%- set recaptchaJs = view.getAssetManager().getPublishedUrl(
-    '@sproutformsgooglerecaptcha/web/assets/recaptcha/dist/js/recaptcha.js',
+    '@sproutformsgooglerecaptcha/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js',
     true) -%}
 {%- do view.registerJsFile(recaptchaJs, {
     async: true,
     defer: true
 }) -%}
 
+{# Our class instantiates all reCAPTCHAs on the page because we only want to load the
+   Google reCAPTCHA API resource file once and it only has a single callback. #}
 {% js %}
-
     if (typeof sproutFormsRecaptchaOnloadCallback === 'undefined') {
     var sproutFormsRecaptchaOnloadCallback = function() {
-    new SproutFormsGoogleRecaptcha({
+    new SproutFormsGoogleRecaptchaInvisible({
     siteKey: '{{ settings.siteKey }}',
-    badgePosition: '{{ badgePosition }}',
+    size: 'invisible',
+    theme: '{{ settings.theme }}',
+    badge: '{{ settings.badge }}',
     grecaptcha: grecaptcha
     });
     };
     };
-
 {% endjs %}
 
 {# reCAPTCHA logic. Must come after `onloadCallback` js above. #}
@@ -41,26 +39,13 @@
     defer: true
 }) -%}
 
-{% if not settings.disableCss %}
+{% if settings.badge == 'inline-text' and not settings.disableCss %}
     {% css %}
-        {# Displays the HTML5 invalid message hint #}
-        #g-recaptcha-response {
-        display: block !important;
-        position: absolute;
-        margin: -78px 0 0 0 !important;
-        width: 302px !important;
-        height: 76px !important;
-        z-index: -999999;
-        opacity: 0;
-        }
-
         {# Hides reCAPTCHA badge, display terms via text instead. See js above. #}
-        {% if settings.badge == 'inline-text' %}
-            .grecaptcha-badge {
-            visibility: hidden;
-            height:0 !important;
-            width:0 !important;
-            }
-        {% endif %}
+        .grecaptcha-badge {
+        visibility: hidden;
+        height:0 !important;
+        width:0 !important;
+        }
     {% endcss %}
 {% endif %}

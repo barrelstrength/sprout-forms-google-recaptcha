@@ -1,3 +1,4 @@
 {
-    "/src/web/assets/recaptcha/dist/js/recaptcha.js": "/src/web/assets/recaptcha/dist/js/recaptcha.js"
+    "/src/web/assets/recaptcha/dist/js/recaptcha_v2_checkbox.js": "/src/web/assets/recaptcha/dist/js/recaptcha_v2_checkbox.js",
+    "/src/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js": "/src/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js"
 }

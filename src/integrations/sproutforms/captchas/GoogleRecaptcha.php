@@ -156,17 +156,9 @@ class GoogleRecaptcha extends Captcha
 
         $settings = $this->getSettings();
 
-        $googleTermsText = Craft::t('site', "This site is protected by reCAPTCHA and the Google <a href='{privacyUrl}'>Privacy Policy</a> and <a href='{termsUrl}'>Terms of Service</a> apply.", [
-            'privacyUrl' => 'https://policies.google.com/privacy',
-            'termsUrl' => 'https://policies.google.com/terms'
-        ]);
-
-        $googleTermsText = '<p>'.$googleTermsText.'</p>';
-
         $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/'.$settings['recaptchaType'], [
             'form' => $form,
-            'settings' => $settings,
-            'googleTermsText' => $googleTermsText
+            'settings' => $settings
         ]);
 
         Craft::$app->getView()->setTemplateMode($oldTemplateMode);
