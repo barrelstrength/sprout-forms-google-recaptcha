@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.0 - 2020-01-17
+
+### Added
+- Added support for Invisible reCAPTCHA v2
+- Added Invisible reCAPTCHA settings for Language, Theme, and Badge Type including a 'Inline Text' option to display a line of text terms instead of a badge
+- Added Checkbox reCAPTCHA settings for Language, Theme, and Size ([#1], [#3], [#332][332-sproutforms])
+- Added support for using reCAPTCHA when displaying multiple forms on a page 
+
+### Changed
+- Updated setting 'Display default required CSS' to 'Disable CSS'
+
+[#1]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/1
+[#3]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/3
+[332-sproutforms]: https://github.com/barrelstrength/craft-sprout-forms/issues/332
+
 ## 1.0.6 - 2019-11-19
 
 ### Added
