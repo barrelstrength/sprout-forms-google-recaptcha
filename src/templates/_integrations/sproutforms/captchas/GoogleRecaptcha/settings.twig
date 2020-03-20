@@ -1,5 +1,13 @@
 {% import "_includes/forms" as forms %}
 
+{% macro configWarning(setting) -%}
+    {{ "This is being overridden by the {setting} config setting."|t('sprout-forms-google-recaptcha', {
+        setting: setting
+    })|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
 {% set recaptchaType = settings.recaptchaType ?? 'v2_checkbox' %}
 
 {{ forms.selectField({
@@ -19,7 +27,8 @@
     },{
         value: "v2_invisible",
         label: "reCAPTCHA v2 - Invisible reCAPTCHA badge",
-    }]
+    }],
+    warning: config.recaptchaType is defined ? configWarning('recaptchaType')
 }) }}
 
 {{ forms.autosuggestField({
@@ -29,7 +38,8 @@
     suggestEnvVars: true,
     required: true,
     errors: null,
-    value: settings['siteKey'] ?? null
+    value: settings['siteKey'] ?? null,
+    warning: config.siteKey is defined ? configWarning('siteKey')
 }) }}
 
 {{ forms.autosuggestField({
@@ -38,7 +48,8 @@
     name: 'captchaSettings['~captchaId~'][secretKey]',
     suggestEnvVars: true,
     required: true,
-    value: settings['secretKey'] ?? null
+    value: settings['secretKey'] ?? null,
+    warning: config.secretKey is defined ? configWarning('secretKey')
 }) }}
 
 {{ forms.selectField({
@@ -46,7 +57,8 @@
     id: 'language',
     name: 'captchaSettings['~captchaId~'][language]',
     value: settings['language'] ?? 'en',
-    options: languageOptions
+    options: languageOptions,
+    warning: config.language is defined ? configWarning('language')
 }) }}
 
 {{ forms.selectField({
@@ -59,7 +71,8 @@
     }, {
         value: 'dark',
         label: 'Dark',
-    }]
+    }],
+    warning: config.theme is defined ? configWarning('theme')
 }) }}
 
 <div id="badge-settings-v2_checkbox"{% if recaptchaType != 'v2_checkbox' %} class="hidden"{% endif %}>
@@ -73,7 +86,8 @@
         }, {
             value: 'compact',
             label: 'Compact',
-        }]
+        }],
+        warning: config.size is defined ? configWarning('size')
     }) }}
 </div>
 
@@ -96,7 +110,8 @@
         }, {
             value: 'inline-text',
             label: 'Inline - Text',
-        }]
+        }],
+        warning: config.badge is defined ? configWarning('badge')
     }) }}
 </div>
 
@@ -106,4 +121,5 @@
     name: 'captchaSettings['~captchaId~'][disableCss]',
     on: settings['disableCss'] ?? false,
     onLabel: "Enable"|t('sprout-forms-google-recaptcha'),
+    warning: config.disableCss is defined ? configWarning('disableCss')
 }) }}

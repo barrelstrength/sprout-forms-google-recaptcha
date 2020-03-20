@@ -11,19 +11,16 @@
 namespace barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\web\View;
-use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use Twig_Error_Loader;
 use yii\base\Exception;
+use yii\base\InvalidValueException;
 
 /**
  * Google reCAPTCHA v2 class
@@ -33,6 +30,14 @@ use yii\base\Exception;
  */
 class GoogleRecaptcha extends Captcha
 {
+    /**
+     * Supported themes
+     *
+     * @var array
+     * @see https://developers.google.com/recaptcha/docs/display#config
+     */
+    protected static $themes = ['light', 'dark'];
+
     /**
      * @var string
      */
@@ -46,22 +51,7 @@ class GoogleRecaptcha extends Captcha
     /**
      * @var bool
      */
-    private $disableCss;
-
-    /**
-     * Remote IP address
-     *
-     * @var string
-     */
-    private $remoteIp;
-
-    /**
-     * Supported themes
-     *
-     * @var array
-     * @see https://developers.google.com/recaptcha/docs/display#config
-     */
-    protected static $themes = ['light', 'dark'];
+    public $disableCss = false;
 
     /**
      * Captcha theme. Default : light
@@ -88,19 +78,17 @@ class GoogleRecaptcha extends Captcha
     protected $size = 'normal';
 
     /**
-     * Initialize site and secret keys
+     * Add support for config setting overrides as we aren't using the default plugin Settings model.
      *
+     * @return array|null
      * @throws ReflectionException
      */
-    public function init()
+    public function getSettings()
     {
-        $settings = $this->getSettings();
-        $this->siteKey = Craft::parseEnv($settings['siteKey']) ?? null;
-        $this->secretKey = Craft::parseEnv($settings['secretKey']) ?? null;
-        $this->disableCss = $settings['disableCss'] ?? false;
-        $this->remoteIp = $_SERVER['REMOTE_ADDR'];
+        $settings = parent::getSettings();
+        $config = Craft::$app->getConfig()->getConfigFromFile('sprout-forms-google-recaptcha');
 
-        parent::init();
+        return array_merge($settings, $config);
     }
 
     /**
@@ -121,18 +109,22 @@ class GoogleRecaptcha extends Captcha
 
     /**
      * @return string
-     * @throws ReflectionException
+     * @throws Exception
      * @throws LoaderError
+     * @throws ReflectionException
      * @throws RuntimeError
      * @throws SyntaxError
      */
     public function getCaptchaSettingsHtml(): string
     {
+        // We just use this here to indicate in the UI if the setting is overridden
+        $config = Craft::$app->getConfig()->getConfigFromFile('sprout-forms-google-recaptcha');
         $settings = $this->getSettings();
 
         $languageOptions = $this->getLanguageOptions();
 
         return Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/settings', [
+            'config' => $config,
             'settings' => $settings,
             'languageOptions' => $languageOptions,
             'captchaId' => $this->getCaptchaId()
@@ -187,12 +179,14 @@ class GoogleRecaptcha extends Captcha
         if (empty($gRecaptchaResponse)) {
             $errorMessage = Craft::t('sprout-forms-google-recaptcha', "Google reCAPTCHA can't be blank.");
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
+
             return false;
         }
 
         if ($this->secretKey === null) {
             $errorMessage = Craft::t('sprout-forms-google-recaptcha', 'Invalid secret key.');
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
+
             return false;
         }
 
@@ -221,7 +215,7 @@ class GoogleRecaptcha extends Captcha
         $params = [
             'secret' => Craft::parseEnv($this->secretKey),
             'response' => $gRecaptcha,
-            'remoteip' => $this->remoteIp,
+            'remoteip' => $_SERVER['REMOTE_ADDR'],
         ];
 
         try {
@@ -236,7 +230,6 @@ class GoogleRecaptcha extends Captcha
             ]);
 
             $responseObject = json_decode($response->getBody()->getContents(), true);
-
         } catch (Throwable $e) {
             // Mock a response object with the error message
             $responseObject['success'] = false;
