@@ -18,6 +18,16 @@ class SproutFormsGoogleRecaptchaCheckbox {
     let self = this;
     let sproutFormsRecaptchaContainers = document.querySelectorAll('.google-recaptcha-container');
 
+    var SproutRecaptchaCallbackEvent = new CustomEvent( "SproutRecaptchaCallback", {
+       bubbles: true,
+       cancelable: true
+    });
+
+    var SproutRecaptchaExpiredCallbackEvent = new CustomEvent( "SproutRecaptchaExpiredCallback", {
+       bubbles: true,
+       cancelable: true
+    });
+
     for (let recaptchaContainer of sproutFormsRecaptchaContainers) {
       let formId = recaptchaContainer.getAttribute('data-google-recaptcha-form-id');
       let form = document.getElementById(formId);
@@ -28,10 +38,12 @@ class SproutFormsGoogleRecaptchaCheckbox {
         'theme': self.theme,
         'size': self.size,
         'callback': function(token) {
-          self.onSproutFormsRecaptchaSuccess(token, form)
+          self.onSproutFormsRecaptchaSuccess(token, form);
+          form.dispatchEvent(SproutRecaptchaCallbackEvent);
         },
         'expired-callback': function() {
-          self.onSproutFormsRecaptchaExpired(form)
+          self.onSproutFormsRecaptchaExpired(form);
+          form.dispatchEvent(SproutRecaptchaExpiredCallbackEvent);
         }
       });
 
