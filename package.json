@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "cross-env": "^6.0.3",
-    "laravel-mix": "^5.0.1"
+    "laravel-mix": "^5.0.1",
+    "laravel-mix-polyfill": "^2.0.0"
   }
 }

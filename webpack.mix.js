@@ -1,12 +1,15 @@
 const mix = require('laravel-mix');
 
+require('laravel-mix-polyfill');
+
 mix
   .js([
     'src/web/assets/recaptcha/src/js/recaptcha_v2_checkbox.js',
   ], 'src/web/assets/recaptcha/dist/js/recaptcha_v2_checkbox.js')
   .js([
     'src/web/assets/recaptcha/src/js/recaptcha_v2_invisible.js',
-  ], 'src/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js');
+  ], 'src/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js')
+  .polyfill();
 
 // Full API
 // mix.js(src, output);
