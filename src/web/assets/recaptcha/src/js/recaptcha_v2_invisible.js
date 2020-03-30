@@ -35,15 +35,15 @@ class SproutFormsGoogleRecaptchaInvisible {
 
       form.setAttribute('data-google-recaptcha-widget-id', widgetId);
 
-      let submitButtonContainer = form.querySelector('.submit');
+      let submitButton = form.querySelector('[type="submit"]');
       let recaptchaInlineTextTerms = form.querySelector('.google-recaptcha-inline-text-terms');
 
       // Place the reCAPTCHA terms after the submit button
       if (this.badge === 'inline-text') {
-        submitButtonContainer.appendChild(recaptchaInlineTextTerms);
+        submitButton.parentNode.insertBefore(recaptchaInlineTextTerms, submitButton.nextSibling);
         recaptchaInlineTextTerms.style.display = 'block';
       } else {
-        submitButtonContainer.appendChild(recaptchaContainer);
+        submitButton.parentNode.insertBefore(recaptchaContainer, submitButton.nextSibling);
         recaptchaContainer.style.display = 'block';
       }
     }
