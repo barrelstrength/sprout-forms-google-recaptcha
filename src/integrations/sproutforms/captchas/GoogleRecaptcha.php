@@ -145,12 +145,11 @@ class GoogleRecaptcha extends Captcha
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_CP);
 
         $settings = $this->getSettings();
+        $settings['siteKey'] = Craft::parseEnv($settings['siteKey']);
 
         if (!$settings['siteKey']) {
             throw new InvalidValueException('reCAPTCHA SiteKey setting must be provided when reCAPTCHA is enabled');
         }
-
-        $settings['siteKey'] = Craft::parseEnv($settings['siteKey']);
 
         $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/'.$settings['recaptchaType'], [
             'form' => $this->form,
@@ -173,6 +172,9 @@ class GoogleRecaptcha extends Captcha
         if (Craft::$app->getRequest()->getIsCpRequest()) {
             return true;
         }
+
+        $settings = $this->getSettings();
+        $this->secretKey = Craft::parseEnv($settings['secretKey']);
 
         $gRecaptchaResponse = $_POST['g-recaptcha-response'] ?? null;
 
