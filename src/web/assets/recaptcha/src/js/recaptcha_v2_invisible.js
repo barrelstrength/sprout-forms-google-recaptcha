@@ -21,15 +21,31 @@ class SproutFormsGoogleRecaptchaInvisible {
     for (let recaptchaContainer of sproutFormsRecaptchaContainers) {
       let formId = recaptchaContainer.getAttribute('data-google-recaptcha-form-id');
       let form = document.getElementById(formId);
+
       this.addFormEventListener(form);
 
-      let widgetId = this.grecaptcha.render(recaptchaContainer.id, {
+      let widgetId = self.grecaptcha.render(recaptchaContainer.id, {
         'sitekey': self.siteKey,
         'theme': self.theme,
         'badge': self.badgePosition,
         'size': 'invisible',
-        'callback': function(token) {
-          self.onSproutFormsRecaptchaSuccess(token, form)
+        'callback': () => {
+          let event = self.sproutFormsSubmitEvent;
+          event.detail.submitHandler.handleFormSubmit();
+          self.grecaptcha.reset();
+        },
+        'error-callback': () => {
+          let event = self.sproutFormsSubmitEvent;
+          event.detail.submitHandler.displayMessageBox({
+            message: '<p>' + 'error callback' + '</p>',
+            messageClass: event.detail.submitHandler.errorMessageClass,
+            errors: {}
+          });
+        },
+        'expired-callback': () => {
+          let event = self.sproutFormsSubmitEvent;
+          event.detail.submitHandler.onFormSubmitCancelledEvent();
+          self.grecaptcha.reset();
         }
       });
 
@@ -57,28 +73,23 @@ class SproutFormsGoogleRecaptchaInvisible {
   addFormEventListener(form) {
     let self = this;
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('sproutFormsSubmit', function(event) {
+
       let targetForm = event.target;
       let widgetId = targetForm.getAttribute('data-google-recaptcha-widget-id');
 
+      // Add the sproutFormsSubmit Event to access later from the grecaptcha callbacks
+      self.sproutFormsSubmitEvent = event;
+
       // Make sure to run reCAPTCHA before submitting form
       if (!self.grecaptcha.getResponse(widgetId)) {
+        // Cancel the default Sprout Forms submissions. We'll handle it from here
+        // because we need to wait for our callbacks.
         event.preventDefault();
         self.grecaptcha.execute(widgetId);
       }
-    }, false);
-  }
 
-  /**
-   * Submit form on successful callback
-   *
-   * @param token
-   * @param form
-   */
-  onSproutFormsRecaptchaSuccess(token, form) {
-    if (form) {
-      form.submit();
-    }
+    }, false);
   }
 
   /**
