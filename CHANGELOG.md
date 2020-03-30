@@ -1,5 +1,30 @@
 # Changelog
 
+## UNRELEASED
+
+### Added 
+- Added support for config overrides via `config/sprout-forms-google-recaptcha.php`. See `src/config.php` for examples.
+
+### Updated
+- Added polyfill for front-end javascript resources to support additional browsers
+- Updated Invisible reCAPTCHA to use `sproutFormsSubmit` Event
+- Updated Checkbox reCAPTCHA to use `sproutFormsSubmit` Event
+- Updated javascript to target submit button element directly, instead of wrapper element ([#12])
+- Updated `barrelstrength/sprout-base-forms` requirement to v3.9.0 ([#15])
+
+### Fixed
+- Fixed issue where `onloadCallback` inline script could load after the script it depends on ([#14]) 
+- Fixed bug parsing `.env` variables ([#11])
+
+### Removed
+- Removed `data-google-recaptcha-form-id` in favor of finding form element directly ([#13])
+
+[#11]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/11
+[#12]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/12
+[#13]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/13
+[#14]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/14
+[#15]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/pull/15
+
 ## 1.1.0 - 2020-01-17
 
 ### Added
@@ -22,7 +47,7 @@
 - Added support for environment variables in settings ([#9][#9pull])
 
 ### Updated
-- Updated barrelstrength/sprout-base-forms requirement to v3.6.1
+- Updated `barrelstrength/sprout-base-forms` requirement to v3.6.1
 
 ### Fixed
 - Fixed bug where CP settings were enabled but didn't exist ([#6][#6pull])
