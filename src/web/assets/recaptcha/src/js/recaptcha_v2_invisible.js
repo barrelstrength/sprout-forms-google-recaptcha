@@ -19,9 +19,7 @@ class SproutFormsGoogleRecaptchaInvisible {
     let sproutFormsRecaptchaContainers = document.querySelectorAll('.google-recaptcha-container');
 
     for (let recaptchaContainer of sproutFormsRecaptchaContainers) {
-      let formId = recaptchaContainer.getAttribute('data-google-recaptcha-form-id');
-      let form = document.getElementById(formId);
-
+      let form = recaptchaContainer.closest('form');
       this.addFormEventListener(form);
 
       let widgetId = self.grecaptcha.render(recaptchaContainer.id, {

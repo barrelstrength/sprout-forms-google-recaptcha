@@ -1,6 +1,6 @@
 {%- set reCaptchaContainerId = form.handle ~ '-form-google-recaptcha' -%}
 
-<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container" data-google-recaptcha-form-id="{{ form.handle }}-form"></div>
+<div id="{{ reCaptchaContainerId }}" class="google-recaptcha-container"></div>
 
 {%- set recaptchaJs = view.getAssetManager().getPublishedUrl(
     '@sproutformsgooglerecaptcha/web/assets/recaptcha/dist/js/recaptcha_v2_checkbox.js',
