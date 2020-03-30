@@ -34,14 +34,6 @@ class SproutFormsGoogleRecaptchaInvisible {
           event.detail.submitHandler.handleFormSubmit();
           self.grecaptcha.reset();
         },
-        'error-callback': () => {
-          let event = self.sproutFormsSubmitEvent;
-          event.detail.submitHandler.displayMessageBox({
-            message: '<p>' + 'error callback' + '</p>',
-            messageClass: event.detail.submitHandler.errorMessageClass,
-            errors: {}
-          });
-        },
         'expired-callback': () => {
           let event = self.sproutFormsSubmitEvent;
           event.detail.submitHandler.onFormSubmitCancelledEvent();
