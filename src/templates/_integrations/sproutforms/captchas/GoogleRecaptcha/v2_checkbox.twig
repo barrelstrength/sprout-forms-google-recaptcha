@@ -12,7 +12,7 @@
 
 {# Our class instantiates all reCAPTCHAs on the page because we only want to load the
    Google reCAPTCHA API resource file once and it only has a single callback. #}
-{% js %}
+{% js at beginBody %}
     if (typeof sproutFormsRecaptchaOnloadCallback === 'undefined') {
     var sproutFormsRecaptchaOnloadCallback = function() {
     new SproutFormsGoogleRecaptchaCheckbox({
