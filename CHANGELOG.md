@@ -1,14 +1,14 @@
 # Changelog
 
-## UNRELEASED
+## 1.2.0 - 2020-04-09
 
 ### Added 
 - Added support for config overrides via `config/sprout-forms-google-recaptcha.php`. See `src/config.php` for examples.
 
 ### Updated
 - Added polyfill for front-end javascript resources to support additional browsers
-- Updated Invisible reCAPTCHA to use `sproutFormsSubmit` Event
-- Updated Checkbox reCAPTCHA to use `sproutFormsSubmit` Event
+- Updated Invisible reCAPTCHA to use `onSproutFormsSubmit` Event
+- Updated Checkbox reCAPTCHA to use `beforeSproutFormsSubmit` Event
 - Updated javascript to target submit button element directly, instead of wrapper element ([#12])
 - Updated `barrelstrength/sprout-base-forms` requirement to v3.9.0 ([#15])
 
