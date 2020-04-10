@@ -63,7 +63,7 @@ class SproutFormsGoogleRecaptchaInvisible {
   addFormEventListener(form) {
     let self = this;
 
-    form.addEventListener('sproutFormsSubmit', function(event) {
+    form.addEventListener('onSproutFormsSubmit', function(event) {
 
       let targetForm = event.target;
       let widgetId = targetForm.getAttribute('data-google-recaptcha-widget-id');
