@@ -236,7 +236,7 @@ class GoogleRecaptcha extends Captcha
             // Mock a response object with the error message
             $responseObject['success'] = false;
             $responseObject['error-codes'] = $e->getMessage();
-            Craft::error('sprout-forms-google-recaptcha', $e->getMessage());
+            Craft::error($e->getMessage(), __METHOD__);
         }
 
         return $responseObject;
