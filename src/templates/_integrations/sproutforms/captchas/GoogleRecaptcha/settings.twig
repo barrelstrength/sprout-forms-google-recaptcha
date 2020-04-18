@@ -8,6 +8,7 @@
 
 {% from _self import configWarning %}
 
+{% set captchaType = className(captcha) %}
 {% set recaptchaType = settings.recaptchaType ?? 'v2_checkbox' %}
 
 {{ forms.selectField({
@@ -16,7 +17,7 @@
         url: 'https://www.google.com/recaptcha/admin'
     }),
     id: 'recaptchaType',
-    name: 'captchaSettings['~captchaId~'][recaptchaType]',
+    name: 'captchaSettings['~captchaType~'][recaptchaType]',
     required: true,
     toggle: true,
     targetPrefix: 'badge-settings-',
@@ -34,7 +35,7 @@
 {{ forms.autosuggestField({
     label: 'Site Key'|t('sprout-forms-google-recaptcha'),
     id: 'siteKey',
-    name: 'captchaSettings['~captchaId~'][siteKey]',
+    name: 'captchaSettings['~captchaType~'][siteKey]',
     suggestEnvVars: true,
     required: true,
     errors: null,
@@ -45,7 +46,7 @@
 {{ forms.autosuggestField({
     label: 'Secret key'|t('sprout-forms-google-recaptcha'),
     id: 'secretKey',
-    name: 'captchaSettings['~captchaId~'][secretKey]',
+    name: 'captchaSettings['~captchaType~'][secretKey]',
     suggestEnvVars: true,
     required: true,
     value: settings['secretKey'] ?? null,
@@ -55,7 +56,7 @@
 {{ forms.selectField({
     label: "Language"|t('sprout-forms-google-recaptcha'),
     id: 'language',
-    name: 'captchaSettings['~captchaId~'][language]',
+    name: 'captchaSettings['~captchaType~'][language]',
     value: settings['language'] ?? 'en',
     options: languageOptions,
     warning: config.language is defined ? configWarning('language')
@@ -63,7 +64,7 @@
 
 {{ forms.selectField({
     label: "Theme"|t('sprout-forms-google-recaptcha'),
-    name: 'captchaSettings['~captchaId~'][theme]',
+    name: 'captchaSettings['~captchaType~'][theme]',
     value: settings['theme'] ?? 'light',
     options: [{
         value: 'light',
@@ -78,7 +79,7 @@
 <div id="badge-settings-v2_checkbox"{% if recaptchaType != 'v2_checkbox' %} class="hidden"{% endif %}>
     {{ forms.selectField({
         label: "Size"|t('sprout-forms-google-recaptcha'),
-        name: 'captchaSettings['~captchaId~'][size]',
+        name: 'captchaSettings['~captchaType~'][size]',
         value: settings['size'] ?? 'normal',
         options: [{
             value: 'normal',
@@ -96,7 +97,7 @@
         label: "Badge Type"|t('sprout-forms-google-recaptcha'),
         instructions: 'Select the type of badge to display. Select an "Inline" option to position the badge with CSS.'|t('sprout-forms-google-recaptcha'),
         id: 'badge',
-        name: 'captchaSettings['~captchaId~'][badge]',
+        name: 'captchaSettings['~captchaType~'][badge]',
         value: settings['badge'] ?? 'bottomright',
         options: [{
             value: 'bottomright',
@@ -118,7 +119,7 @@
 {{ forms.lightswitchField({
     label: 'Disable CSS',
     instructions: 'Enable this setting if you wish to manage CSS manually.',
-    name: 'captchaSettings['~captchaId~'][disableCss]',
+    name: 'captchaSettings['~captchaType~'][disableCss]',
     on: settings['disableCss'] ?? false,
     onLabel: "Enable"|t('sprout-forms-google-recaptcha'),
     warning: config.disableCss is defined ? configWarning('disableCss')

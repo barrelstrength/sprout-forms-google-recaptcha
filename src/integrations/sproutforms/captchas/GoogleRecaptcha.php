@@ -78,20 +78,6 @@ class GoogleRecaptcha extends Captcha
     protected $size = 'normal';
 
     /**
-     * Add support for config setting overrides as we aren't using the default plugin Settings model.
-     *
-     * @return array|null
-     * @throws ReflectionException
-     */
-    public function getSettings()
-    {
-        $settings = parent::getSettings();
-        $config = Craft::$app->getConfig()->getConfigFromFile('sprout-forms-google-recaptcha');
-
-        return array_merge($settings, $config);
-    }
-
-    /**
      * @return string
      */
     public function getName(): string
@@ -124,10 +110,10 @@ class GoogleRecaptcha extends Captcha
         $languageOptions = $this->getLanguageOptions();
 
         return Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/settings', [
+            'captcha' => $this,
             'config' => $config,
             'settings' => $settings,
-            'languageOptions' => $languageOptions,
-            'captchaId' => $this->getCaptchaId()
+            'languageOptions' => $languageOptions
         ]);
     }
 
