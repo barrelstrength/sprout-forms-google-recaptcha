@@ -88,7 +88,11 @@ class GoogleRecaptcha extends Captcha
         $settings = parent::getSettings();
         $config = Craft::$app->getConfig()->getConfigFromFile('sprout-forms-google-recaptcha');
 
-        return array_merge($settings, $config);
+        if ($settings) {
+            return array_merge($settings, $config);
+        }
+
+        return $config;
     }
 
     /**
