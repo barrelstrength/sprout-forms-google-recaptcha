@@ -5,6 +5,10 @@ namespace barrelstrength\sproutformsgooglerecaptcha\migrations;
 use Craft;
 use craft\db\Migration;
 use craft\services\Plugins;
+use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\base\NotSupportedException;
+use yii\web\ServerErrorHttpException;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_migrationName
@@ -16,10 +20,10 @@ class m191119_000000_set_default_recaptcha_css extends Migration
 
     /**
      * @return bool|void
-     * @throws \yii\base\ErrorException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\NotSupportedException
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws ErrorException
+     * @throws Exception
+     * @throws NotSupportedException
+     * @throws ServerErrorHttpException
      */
     public function safeUp()
     {

@@ -97,7 +97,6 @@ class GoogleRecaptcha extends Captcha
      * @return string
      * @throws Exception
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws RuntimeError
      * @throws SyntaxError
      */
@@ -121,7 +120,6 @@ class GoogleRecaptcha extends Captcha
      * @return string
      * @throws Exception
      * @throws LoaderError
-     * @throws ReflectionException
      * @throws RuntimeError
      * @throws SyntaxError
      */

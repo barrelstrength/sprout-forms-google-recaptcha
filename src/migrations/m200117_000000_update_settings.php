@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutformsgooglerecaptcha\migrations;
 
+use Craft;
 use craft\db\Migration;
 use craft\services\Plugins;
-use Craft;
 use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\base\NotSupportedException;

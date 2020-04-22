@@ -12,10 +12,10 @@ namespace barrelstrength\sproutformsgooglerecaptcha;
 
 use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas\GoogleRecaptcha;
+use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use yii\base\Event;
-use Craft;
 
 /**
  * Class SproutFormsGoogleRecaptcha
