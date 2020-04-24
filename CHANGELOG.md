@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.3.0 - UNRELEASED
+
+> {note} If you are using config overrides in `config/sprout-forms-google-recpatcha.php` will need to migrate those settings to Sprout Forms `config/sprout-forms.php`. See the `captchaSettings` setting in [the docs](https://sprout.barrelstrengthdesign.com/docs/forms/plugin-settings.html) and an example config (`src/config.php`) in the plugins vendor folder.
+
+### Changed
+- Updated captcha settings to use class name
+- Updated `barrelstrength/sprout-base-forms` requirement to v3.10.0
+
+### Fixed
+- Fixed error where settings assumed a file-based config existed ([#16], [#17], [#18-PR][#18-pull])
+- Fixed error message syntax
+
+### Removed
+- Removed support for `sprout-forms-google-recpatcha.php` config in favor of the Captcha settings array in `sprout-forms.php` config
+
+[#16]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/16
+[#17]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/17
+[#18-pull]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/pull/18
+
 ## 1.2.0 - 2020-04-09
 
 ### Added 
