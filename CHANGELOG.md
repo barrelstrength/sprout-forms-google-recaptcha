@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.0 - UNRELEASED
+## 1.3.0 - 2020-04-27
 
 > {note} If you are using config overrides in `config/sprout-forms-google-recpatcha.php` will need to migrate those settings to Sprout Forms `config/sprout-forms.php`. See the `captchaSettings` setting in [the docs](https://sprout.barrelstrengthdesign.com/docs/forms/plugin-settings.html) and an example config (`src/config.php`) in the plugins vendor folder.
 
