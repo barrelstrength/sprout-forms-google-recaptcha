@@ -35,7 +35,7 @@
 {% endjs %}
 
 {# reCAPTCHA logic. Must come after `sproutFormsRecaptchaOnloadCallback` js above. #}
-{%- do view.registerJsFile('https://www.google.com/recaptcha/api.js?onload=sproutFormsRecaptchaOnloadCallback&render=explicit&hl=' ~ settings.language, {
+{%- do view.registerJsFile('https://www.google.com/recaptcha/api.js?onload=sproutFormsRecaptchaOnloadCallback&render=explicit&hl=' ~ languageId, {
     async: true,
     defer: true
 }) -%}

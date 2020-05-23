@@ -54,15 +54,6 @@
 }) }}
 
 {{ forms.selectField({
-    label: "Language"|t('sprout-forms-google-recaptcha'),
-    id: 'language',
-    name: 'captchaSettings['~captchaType~'][language]',
-    value: settings['language'] ?? 'en',
-    options: languageOptions,
-    warning: config.language is defined ? configWarning('language')
-}) }}
-
-{{ forms.selectField({
     label: "Theme"|t('sprout-forms-google-recaptcha'),
     name: 'captchaSettings['~captchaType~'][theme]',
     value: settings['theme'] ?? 'light',
@@ -115,6 +106,16 @@
         warning: config.badge is defined ? configWarning('badge')
     }) }}
 </div>
+
+{{ forms.selectField({
+    label: "Fallback Language"|t('sprout-forms-google-recaptcha'),
+    instructions: "The language to use when displaying reCAPTCHA if no matching Craft locale is found when loading the page."|t('sprout-forms-google-recaptcha'),
+    id: 'language',
+    name: 'captchaSettings['~captchaType~'][language]',
+    value: settings['language'] ?? 'en',
+    options: languageOptions,
+    warning: config.language is defined ? configWarning('language')
+}) }}
 
 {{ forms.lightswitchField({
     label: 'Disable CSS',

@@ -135,14 +135,50 @@ class GoogleRecaptcha extends Captcha
             throw new InvalidValueException('reCAPTCHA SiteKey setting must be provided when reCAPTCHA is enabled');
         }
 
+        $languageId = $this->getMatchedLanguageId() ?? $settings['language'];
+
         $html = Craft::$app->getView()->renderTemplate('sprout-forms-google-recaptcha/_integrations/sproutforms/captchas/GoogleRecaptcha/'.$settings['recaptchaType'], [
             'form' => $this->form,
-            'settings' => $settings
+            'settings' => $settings,
+            'languageId' => $languageId
         ]);
 
         Craft::$app->getView()->setTemplateMode($oldTemplateMode);
 
         return $html;
+    }
+
+    public function getMatchedLanguageId() {
+
+        $currentLanguageId = Craft::$app->locale->getLanguageID();
+
+        // 700+ languages supported
+        $allCraftLocales = Craft::$app->getI18n()->getAllLocales();
+        $allCraftLanguageIds = array_column($allCraftLocales, 'id');
+
+        // ~70 languages supported
+        $allRecaptchaLanguages = $this->getLanguageOptions();
+        $allRecaptchaLanguageIds = array_column($allRecaptchaLanguages, 'value');
+
+        // 65 matched language IDs
+        $matchedLanguageIds = array_intersect($allRecaptchaLanguageIds, $allCraftLanguageIds);
+
+        // If our current request Language ID matches a reCAPTCHA language ID, use it
+        if (in_array($currentLanguageId, $matchedLanguageIds, true)) {
+            return $currentLanguageId;
+        }
+
+        // If our current language ID has a more generic match, use it
+        if (strpos($currentLanguageId, '-') !== false) {
+            $parts = explode('-', $currentLanguageId);
+            $baseLanguageId = $parts['0'] ?? null;
+
+            if (in_array($baseLanguageId, $matchedLanguageIds, true)) {
+                return $baseLanguageId;
+            }
+        }
+
+        return null;
     }
 
     /**
