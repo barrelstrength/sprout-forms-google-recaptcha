@@ -9,11 +9,12 @@
         })|raw }}</p>
 {% endif %}
 
+{# We place our custom reCAPTCHA js and inline JS block at the beginning of the page so we can output them in the order we want them to load as Yii gives us no way to output an inline JS block between script tags and we need the inline JS block where it is because the variables it references are available in Twig. #}
 {%- set recaptchaJs = view.getAssetManager().getPublishedUrl(
     '@sproutformsgooglerecaptcha/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js',
     true) -%}
 {%- do view.registerJsFile(recaptchaJs, {
-    async: true,
+    position: POS_BEGIN,
     defer: true
 }) -%}
 
@@ -33,7 +34,7 @@
     };
 {% endjs %}
 
-{# reCAPTCHA logic. Must come after `onloadCallback` js above. #}
+{# reCAPTCHA logic. Must come after `sproutFormsRecaptchaOnloadCallback` js above. #}
 {%- do view.registerJsFile('https://www.google.com/recaptcha/api.js?onload=sproutFormsRecaptchaOnloadCallback&render=explicit&hl=' ~ settings.language, {
     async: true,
     defer: true
