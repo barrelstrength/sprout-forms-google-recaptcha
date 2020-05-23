@@ -9,7 +9,9 @@ mix
   .js([
     'src/web/assets/recaptcha/src/js/recaptcha_v2_invisible.js',
   ], 'src/web/assets/recaptcha/dist/js/recaptcha_v2_invisible.js')
-  .polyfill();
+  .polyfill({
+    targets: '> 0.5%, last 2 versions, Firefox ESR'
+  });
 
 // Full API
 // mix.js(src, output);
