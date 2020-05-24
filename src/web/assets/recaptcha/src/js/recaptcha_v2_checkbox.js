@@ -24,6 +24,7 @@ class SproutFormsGoogleRecaptchaCheckbox {
 
     for (let recaptchaContainer of sproutFormsRecaptchaContainers) {
       let form = recaptchaContainer.closest('form');
+      this.addFormEventListener(form);
 
       let widgetId = this.grecaptcha.render(recaptchaContainer.id, {
         'sitekey': self.siteKey,
@@ -90,6 +91,24 @@ class SproutFormsGoogleRecaptchaCheckbox {
       recaptchaResponseTextarea.required = true;
       recaptchaResponseTextarea.setCustomValidity(this.customValidityText);
     }
+  }
+
+  /**
+   * Adds Event Listener to ensure we reset reCAPTCHA after AJAX submissions
+   *
+   * @param form
+   */
+  addFormEventListener(form) {
+    let self = this;
+
+    form.addEventListener('afterSproutFormsSubmit', function(event) {
+      console.log('sss');
+      let targetForm = event.target;
+      let widgetId = targetForm.getAttribute('data-google-recaptcha-widget-id');
+      self.grecaptcha.reset(widgetId);
+      self.makeRecaptchasRequired();
+
+    }, false);
   }
 }
 
