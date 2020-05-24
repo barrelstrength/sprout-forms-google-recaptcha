@@ -102,7 +102,7 @@ class SproutFormsGoogleRecaptchaCheckbox {
     let self = this;
 
     form.addEventListener('afterSproutFormsSubmit', function(event) {
-      console.log('sss');
+
       let targetForm = event.target;
       let widgetId = targetForm.getAttribute('data-google-recaptcha-widget-id');
       self.grecaptcha.reset(widgetId);
