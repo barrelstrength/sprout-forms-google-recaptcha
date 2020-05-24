@@ -11,7 +11,11 @@ class SproutFormsGoogleRecaptchaCheckbox {
     this.grecaptcha = settings.grecaptcha;
 
     this.initRecaptchas();
-    this.makeRecaptchasRequired();
+
+    let self = this;
+    window.onload = function() {
+      self.makeRecaptchasRequired();
+    }
   }
 
   initRecaptchas() {
@@ -69,11 +73,10 @@ class SproutFormsGoogleRecaptchaCheckbox {
    */
   makeRecaptchasRequired() {
     let self = this;
-    window.onload = function() {
-      let recaptchaResponseTextareas = document.querySelectorAll('.g-recaptcha-response');
-      for (const recaptchaResponseTextarea of recaptchaResponseTextareas) {
-        self.makeRecaptchaRequired(recaptchaResponseTextarea);
-      }
+
+    let recaptchaResponseTextareas = document.querySelectorAll('.g-recaptcha-response');
+    for (const recaptchaResponseTextarea of recaptchaResponseTextareas) {
+      self.makeRecaptchaRequired(recaptchaResponseTextarea);
     }
   }
 
