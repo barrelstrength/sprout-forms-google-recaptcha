@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.4.0 - 2020-04-27
+
+### Added
+- Added support for dynamically setting reCAPTCHA language based on current locale ([#19])
+
+### Changed
+- Updated reCAPTCHA 'Language' setting to 'Fallback Language'
+- Updated polyfill rules when generating front-end resources
+- Updated javascript resource loading order ([#21])
+- Updated Checkbox reCAPTCHA javascript and removed `beforeSproutFormsSubmit` logic
+
+### Fixed
+- Fixed Checkbox reCAPTCHA throws an "Uncaught in Promise" error after checked ([#22])
+- Fixed HTML5 invalid message when two forms exist on the same page
+
+[#19]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/19
+[#21]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/21
+[#22]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/22
+
 ## 1.3.0 - 2020-04-27
 
 > {note} If you are using config overrides in `config/sprout-forms-google-recpatcha.php` will need to migrate those settings to Sprout Forms `config/sprout-forms.php`. See the `captchaSettings` setting in [the docs](https://sprout.barrelstrengthdesign.com/docs/forms/plugin-settings.html) and an example config (`src/config.php`) in the plugins vendor folder.
