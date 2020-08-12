@@ -22,7 +22,7 @@ class SproutFormsGoogleRecaptchaInvisible {
       let form = recaptchaContainer.closest('form');
       this.addFormEventListener(form);
 
-      let widgetId = self.grecaptcha.render(recaptchaContainer.id, {
+      let widgetId = self.grecaptcha.render(recaptchaContainer, {
         'sitekey': self.siteKey,
         'theme': self.theme,
         'badge': self.badgePosition,

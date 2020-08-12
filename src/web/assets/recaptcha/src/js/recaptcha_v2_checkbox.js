@@ -26,7 +26,7 @@ class SproutFormsGoogleRecaptchaCheckbox {
       let form = recaptchaContainer.closest('form');
       this.addFormEventListener(form);
 
-      let widgetId = this.grecaptcha.render(recaptchaContainer.id, {
+      let widgetId = this.grecaptcha.render(recaptchaContainer, {
         'sitekey': self.siteKey,
         'theme': self.theme,
         'size': self.size,
