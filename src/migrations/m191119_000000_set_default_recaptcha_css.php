@@ -27,6 +27,12 @@ class m191119_000000_set_default_recaptcha_css extends Migration
      */
     public function safeUp()
     {
+        $schemaVersion = Craft::$app->projectConfig->get('plugins.sprout-forms-google-recaptcha.schemaVersion', true);
+        // If the schemaVersion is already past 1.1.0, do not update project config
+        if (version_compare($schemaVersion, '1.1.0', '>=')) {
+          return true;
+        }
+
         $projectConfig = Craft::$app->getProjectConfig();
         $pluginHandle = 'sprout-forms';
         $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
