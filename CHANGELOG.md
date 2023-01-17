@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.1 - 2021-01-17
+
+### Fixed
+- Updated to use DOM element instead of element id on render ([#27])
+- Fixed migrations to better support allowAdminChanges ([#46])
+
+[#27]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/27
+[#46]: https://github.com/barrelstrength/craft-sprout-forms-google-recaptcha/issues/46
+
 ## 1.4.0 - 2020-04-27
 
 ### Added
