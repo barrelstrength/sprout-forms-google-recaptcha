@@ -23,7 +23,7 @@ class m200117_000000_update_settings extends Migration
     {
 
         $schemaVersion = Craft::$app->projectConfig->get('plugins.sprout-forms-google-recaptcha.schemaVersion', true);
-        // If the schemaVersion is already past 1.1.0, do not update project config
+        // Don't make the same config changes twice
         if (version_compare($schemaVersion, '1.1.0', '>=')) {
           return true;
         }
